@@ -1,0 +1,1090 @@
+<meta charset="UTF-8">
+<title>人工智慧應用與技術備課大綱</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@600;700;900&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    color-scheme: light;
+    --surface:     #f9f9f7;
+    --card:        #fcfcfb;
+    --ink:         #0b0b0b;
+    --ink-2:       #52514e;
+    --ink-muted:   #898781;
+    --hairline:    #e1e0d9;
+    --border:      rgba(11,11,11,0.10);
+    --accent-ring: #c23a3a;
+    --accent-bg:   #fbeceb;
+
+    /* 8 個分類色 slot——固定順序使用（cat.key = "c1","c2"...），不要重排。
+       課程大類數量若超過 8，額外的類別要自己再加 c9、c10... 並補齊 tint／dark。 */
+    --c1: #2a78d6; --c1-tint: #eaf1fb;
+    --c2: #d1592a; --c2-tint: #fbeee7;
+    --c3: #14966a; --c3-tint: #e7f5ef;
+    --c4: #b8860a; --c4-tint: #faf3df;
+    --c5: #c14a78; --c5-tint: #fbedf2;
+    --c6: #2f7a2f; --c6-tint: #edf5ec;
+    --c7: #5b4ea3; --c7-tint: #eeecf9;
+    --c8: #4d6b80; --c8-tint: #eaf0f3;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --surface:     #0d0d0d;
+      --card:        #1a1a19;
+      --ink:         #ffffff;
+      --ink-2:       #c3c2b7;
+      --ink-muted:   #898781;
+      --hairline:    #2c2c2a;
+      --border:      rgba(255,255,255,0.12);
+      --accent-ring: #e66767;
+      --accent-bg:   #2a1615;
+
+      --c1: #3987e5; --c1-tint: #14202f;
+      --c2: #d95926; --c2-tint: #2a1c10;
+      --c3: #199e70; --c3-tint: #0f2620;
+      --c4: #c98500; --c4-tint: #2a2110;
+      --c5: #d55181; --c5-tint: #2a151e;
+      --c6: #3fb53f; --c6-tint: #142616;
+      --c7: #9085e9; --c7-tint: #1c1930;
+      --c8: #8fa3b8; --c8-tint: #16222a;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --surface:     #0d0d0d;
+    --card:        #1a1a19;
+    --ink:         #ffffff;
+    --ink-2:       #c3c2b7;
+    --ink-muted:   #898781;
+    --hairline:    #2c2c2a;
+    --border:      rgba(255,255,255,0.12);
+    --accent-ring: #e66767;
+    --accent-bg:   #2a1615;
+
+    --c1: #3987e5; --c1-tint: #14202f;
+    --c2: #d95926; --c2-tint: #2a1c10;
+    --c3: #199e70; --c3-tint: #0f2620;
+    --c4: #c98500; --c4-tint: #2a2110;
+    --c5: #d55181; --c5-tint: #2a151e;
+    --c6: #3fb53f; --c6-tint: #142616;
+    --c7: #9085e9; --c7-tint: #1c1930;
+    --c8: #8fa3b8; --c8-tint: #16222a;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--surface);
+    color: var(--ink);
+    font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif;
+  }
+  h1, h2, h3 { font-family: "Noto Serif TC", "Noto Sans TC", serif; }
+
+  a { color: inherit; }
+
+  /* ---------- Top bar ---------- */
+  #topbar {
+    position: sticky; top: 0; z-index: 20;
+    background: color-mix(in oklab, var(--card) 92%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--hairline);
+  }
+  .topbar-inner {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .brand { display: flex; flex-direction: column; gap: 1px; margin-right: 6px; }
+  .brand .name { font-size: 15px; font-weight: 900; font-family: "Noto Serif TC", serif; }
+  .brand .sub { font-size: 11px; color: var(--ink-muted); font-variant-numeric: tabular-nums; }
+
+  .search-wrap { position: relative; flex: 1 1 180px; min-width: 140px; max-width: 260px; }
+  .search-wrap input {
+    width: 100%;
+    padding: 7px 12px 7px 30px;
+    border-radius: 8px;
+    border: 1px solid var(--hairline);
+    background: var(--surface);
+    color: var(--ink);
+    font-family: inherit;
+    font-size: 13px;
+    outline: none;
+  }
+  .search-wrap input:focus { border-color: var(--c1); }
+  .search-wrap svg { position: absolute; left: 9px; top: 50%; transform: translateY(-50%); opacity: 0.5; pointer-events: none; }
+
+  .toolbtn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 7px 12px; border-radius: 8px;
+    border: 1px solid var(--hairline);
+    background: var(--surface); color: var(--ink-2);
+    font-family: inherit; font-size: 12.5px; font-weight: 500;
+    cursor: pointer; white-space: nowrap;
+  }
+  .toolbtn:hover { border-color: var(--ink-muted); color: var(--ink); }
+  .toolbtn.active { background: var(--accent-bg); border-color: var(--accent-ring); color: var(--accent-ring); }
+
+  .jumpnav { display: flex; gap: 6px; flex-wrap: wrap; margin-left: auto; }
+  .jumpchip {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 5px 9px; border-radius: 999px;
+    border: 1px solid var(--hairline);
+    background: var(--surface);
+    font-family: inherit;
+    font-size: 11.5px; font-weight: 700;
+    text-decoration: none;
+    color: var(--ink-2);
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  .jumpchip .dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+  .jumpchip:hover { border-color: var(--ink-muted); color: var(--ink); }
+  .jumpchip.active { background: var(--ink); border-color: var(--ink); color: var(--card); }
+  .jumpchip.active .dot { outline: 2px solid var(--card); outline-offset: 1px; }
+
+  /* ---------- Page ---------- */
+  #page { max-width: 980px; margin: 0 auto; padding: 28px 24px 80px; }
+
+  .hero { margin-bottom: 26px; }
+  .hero .eyebrow {
+    font-size: 11.5px; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--ink-muted); margin-bottom: 8px;
+  }
+  .hero h1 { font-size: 26px; font-weight: 900; margin: 0 0 8px; line-height: 1.3; text-wrap: balance; }
+  .hero p { font-size: 14px; color: var(--ink-2); line-height: 1.8; max-width: 62ch; margin: 0; }
+
+  /* ---------- Weight table ---------- */
+  .plan-table {
+    margin-top: 22px;
+    border: 1px solid var(--hairline);
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--card);
+  }
+  .plan-row {
+    display: grid;
+    grid-template-columns: 22px 1.4fr 62px 78px 62px 58px 78px;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border-top: 1px solid var(--hairline);
+    font-size: 12.5px;
+    text-decoration: none;
+    color: var(--ink);
+  }
+  .plan-row:first-child { border-top: none; background: color-mix(in oklab, var(--ink) 4%, var(--card)); font-weight: 700; color: var(--ink-muted); font-size: 11px; letter-spacing: .03em; }
+  .plan-row:not(:first-child):hover { background: color-mix(in oklab, var(--ink) 3%, var(--card)); }
+  .plan-row .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .plan-row .name { font-weight: 700; }
+  .plan-row .num { font-variant-numeric: tabular-nums; text-align: right; color: var(--ink-2); }
+  .plan-row .hours-cell { font-weight: 700; color: var(--ink); }
+  .plan-row:first-child .hours-cell { font-weight: 700; color: var(--ink-muted); }
+  .weightbar { grid-column: 1 / -1; height: 6px; border-radius: 4px; background: var(--hairline); overflow: hidden; margin: 0 16px 12px; display: flex; }
+  .weightbar span { height: 100%; }
+
+  .hours-wrap {
+    display: flex; align-items: center; gap: 8px;
+    margin: 18px 0 -6px;
+    font-size: 12.5px; color: var(--ink-2);
+  }
+  .hours-wrap input {
+    width: 64px;
+    padding: 5px 8px;
+    border-radius: 7px;
+    border: 1px solid var(--hairline);
+    background: var(--card);
+    color: var(--ink);
+    font-family: inherit;
+    font-size: 12.5px;
+    font-variant-numeric: tabular-nums;
+  }
+  .hours-wrap input:focus { outline: none; border-color: var(--c1); }
+
+  /* ---------- Unit sections ---------- */
+  .unit {
+    margin-top: 44px;
+    scroll-margin-top: 84px;
+  }
+  .unit-head {
+    display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;
+    padding-bottom: 14px; margin-bottom: 18px;
+    border-bottom: 3px solid var(--u-color);
+  }
+  .unit-head .idx {
+    font-family: "Noto Serif TC", serif;
+    font-size: 13px; font-weight: 700; color: var(--u-color);
+    border: 1.5px solid var(--u-color); border-radius: 50%;
+    width: 26px; height: 26px; display: flex; align-items: center; justify-content: center;
+    flex: none;
+  }
+  .unit-head h2 { font-size: 20px; font-weight: 900; margin: 0; flex: 1 1 auto; min-width: 200px; }
+  .unit-meta { font-size: 12px; color: var(--ink-muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .unit-copy {
+    border: 1px solid var(--hairline); background: var(--card); color: var(--ink-2);
+    border-radius: 7px; padding: 5px 10px; font-size: 11.5px; cursor: pointer; font-family: inherit;
+  }
+  .unit-copy:hover { border-color: var(--u-color); color: var(--u-color); }
+
+  .subgrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  .unit.single .subgrid { grid-template-columns: repeat(3, 1fr); }
+  @media (max-width: 900px) { .unit.single .subgrid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 700px) { .subgrid, .unit.single .subgrid { grid-template-columns: 1fr; } }
+
+  .back-to-overview {
+    display: none;
+    align-items: center;
+    gap: 6px;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--ink-muted);
+    background: none;
+    border: none;
+    font-family: inherit;
+    cursor: pointer;
+    padding: 0 0 16px;
+  }
+  .back-to-overview:hover { color: var(--ink); }
+  body.tab-single .back-to-overview { display: inline-flex; }
+  body.tab-single #plan-table, body.tab-single .hero, body.tab-single .hours-wrap { display: none; }
+
+  .subcard {
+    background: var(--u-tint);
+    border: 1px solid color-mix(in oklab, var(--u-color) 30%, var(--hairline));
+    border-radius: 12px;
+    padding: 14px 16px;
+  }
+  .subcard h3 {
+    font-size: 13.5px; font-weight: 700; margin: 0 0 10px;
+    color: var(--ink);
+    font-family: "Noto Sans TC", sans-serif;
+  }
+  .subcard ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 7px; }
+  .subcard li { font-size: 12.5px; line-height: 1.6; color: var(--ink-2); }
+  .subcard li b { color: var(--ink); font-weight: 700; }
+  .subcard li .star { color: var(--accent-ring); margin-right: 2px; }
+  .subcard li.hot { background: var(--accent-bg); margin: 0 -8px; padding: 4px 8px; border-radius: 6px; }
+
+  .pt-row { position: relative; }
+  .subcard li.expandable { cursor: pointer; }
+  .subcard li.expandable:hover .pt-row { background: color-mix(in oklab, var(--u-color) 8%, transparent); }
+  .subcard li.expandable:focus-visible { outline: 2px solid var(--u-color); outline-offset: 2px; border-radius: 5px; }
+  .subcard li.expandable .pt-row {
+    padding: 2px 44px 2px 4px;
+    margin: -2px -4px;
+    border-radius: 6px;
+  }
+  .expand-mark {
+    position: absolute; right: 0; top: 50%;
+    transform: translateY(-50%);
+    display: inline-flex; align-items: center; gap: 3px;
+    color: var(--u-color);
+    background: color-mix(in oklab, var(--u-color) 14%, transparent);
+    border-radius: 999px;
+    padding: 1px 7px 1px 6px;
+    font-size: 10px;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .expand-mark .chev { display: inline-block; transition: transform 0.15s ease; }
+  .subcard li.expanded .expand-mark .chev { transform: rotate(180deg); }
+
+  .subcard li .sub-terms {
+    list-style: none;
+    margin: 8px 0 0;
+    padding: 8px 0 2px 12px;
+    border-left: 2px solid color-mix(in oklab, var(--u-color) 45%, var(--hairline));
+    display: none;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .subcard li.expanded .sub-terms { display: flex; }
+  .subcard .sub-terms li { font-size: 12px; color: var(--ink-2); cursor: default; }
+  .subcard .sub-terms li b { color: var(--u-color); font-weight: 700; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .expand-mark { transition: transform 0.15s ease; }
+  }
+
+  li.pt-dim { opacity: 0.28; }
+  li.pt-match { outline: 2px solid var(--c1); outline-offset: 2px; border-radius: 5px; }
+
+  #no-results { display: none; text-align: center; color: var(--ink-muted); font-size: 13px; padding: 60px 0; }
+
+  footer {
+    max-width: 980px; margin: 40px auto 0; padding: 20px 24px 40px;
+    border-top: 1px solid var(--hairline);
+    font-size: 11.5px; color: var(--ink-muted); line-height: 1.9;
+  }
+
+  @media print {
+    #topbar { position: static; }
+    .jumpnav, .search-wrap, #btn-hot, #btn-copyall, .unit-copy, #btn-expand-terms, .hours-wrap { display: none !important; }
+    .expand-mark { display: none !important; }
+    .subcard li .sub-terms { display: flex !important; }
+    body { background: #fff; color: #000; }
+    body.tab-single #plan-table, body.tab-single .hero, body.tab-single .hours-wrap { display: none; }
+  }
+
+  @media (max-width: 860px) {
+    .legend { margin-left: 0; }
+  }
+</style>
+
+<div id="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <div class="name" id="brand-name">備課大綱</div>
+      <div class="sub" id="stat-line">載入中…</div>
+    </div>
+    <div class="search-wrap">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      <input id="search" type="text" placeholder="搜尋知識點、專有名詞…" autocomplete="off">
+    </div>
+    <button class="toolbtn" id="btn-hot">★ 只看易混淆重點</button>
+    <button class="toolbtn" id="btn-expand-terms">▾ 展開全部名詞說明</button>
+    <button class="toolbtn" id="btn-copyall">複製全部大綱</button>
+    <nav class="jumpnav" id="jumpnav"></nav>
+  </div>
+</div>
+
+<div id="page">
+  <button class="back-to-overview" id="btn-back">← 回總覽</button>
+  <div class="hero">
+    <div class="eyebrow" id="hero-eyebrow">備課參考</div>
+    <h1 id="hero-title">把題庫整理成可以直接拿去排課的大綱</h1>
+    <p id="hero-desc"></p>
+  </div>
+
+  <div class="hours-wrap">
+    <label for="hours-input">總授課時數</label>
+    <input type="number" id="hours-input" min="0" step="0.5" placeholder="例如 18">
+    <span>小時 → 下表自動換算各單元建議時數</span>
+  </div>
+  <div class="plan-table" id="plan-table"></div>
+
+  <div id="units"></div>
+  <div id="no-results">沒有符合「<span id="no-results-q"></span>」的知識點</div>
+
+  <footer id="page-footer"></footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  // =================================================================
+  // 1) CONFIG — 每個課程只需要改這裡 + 下面的 DATA，其他都是共用邏輯
+  // =================================================================
+  var CONFIG = {
+    pageTitle: "人工智慧應用與技術備課大綱",
+    courseName: "【TQC】人工智慧應用與技術-專業級",
+    courseCode: "人工智慧應用與技術-專業級",
+    heroTitle: null,
+    heroDesc: null,
+    sourceNote: "CSF 雲端練功坊「人工智慧應用與技術-專業級」練習題庫"
+  };
+
+  // =================================================================
+  // 2) DATA — 課程知識點內容，照這個 schema 填
+  // =================================================================
+  //
+  // DATA = [ category, category, ... ]   // 大類，對應網站「特定領域練習」清單
+  //
+  // category = {
+  //   name:  "大類全名",
+  //   short: "大類簡稱（4字內，給分頁按鈕用，避免自動截字切到一半）",
+  //   count: 62,          // 這個大類的實際題數（跟 export_questions.py discover 出來的一致）
+  //   key:   "c1",        // c1~c8，依序用，不要跳號、不要重複（用來對應 CSS 顏色 slot）
+  //   subtopics: [ subtopic, subtopic, ... ]
+  // }
+  //
+  // subtopic = {
+  //   name: "子主題名稱",
+  //   points: [ point, point, ... ]
+  // }
+  //
+  // point = [ label, desc, hot, terms? ]
+  //   label : string   — 知識點標籤，8~15字內，適合當卡片粗體標題
+  //   desc  : string   — 一句話完整說明（含考點方向、易混淆提醒）
+  //   hot   : 0 | 1     — 1 = 題庫裡明確標示為易混淆／高頻考點，卡片會標★＋紅框
+  //   terms : 可省略。當這個知識點其實是「一句話塞好幾個專有名詞」時
+  //           （例如「PPC/CPC vs CPM vs CPA/CPS」），把每個名詞拆開列成
+  //           [[術語, 完整解釋], [術語, 完整解釋], ...]，頁面上會變成可
+  //           點擊展開的清單。判斷標準：desc 裡如果出現 2 個以上帶自己
+  //           定義的縮寫/專有名詞，就該拆成 terms，不要全部塞在一句話裡。
+  //
+  // === 品質要求（做完一定要做，不要省略）===
+  // A. 每個 category 的 points 要「逐題比對過原始 PDF 題目全文」，不能只憑
+  //    子主題標題腦補。摘要時最容易漏掉的是：選擇題裡「正確答案以外的
+  //    干擾選項」也常是獨立考點（例如 CNN/RNN/LSTM 對比題，正解只提
+  //    CNN vs RNN，但 GAN、Transformer 當幹擾選項也會被學生考到）。
+  // B. 建議流程：先用 fork 逐大類讀 PDF 文字整理出知識架構 → 再用第二輪
+  //    fork「稽核」比對「知識架構」跟「原始題目全文」找遺漏 → 把遺漏補
+  //    進 DATA。兩輪都做，不要只做第一輪就上線。詳細步驟見同資料夾
+  //    「製作流程.md」。
+  // C. count（大類題數）跟 export_questions.py discover 出來的數字要一致，
+  //    不要用「points.length」湊數——points 是知識點數，不是題數。
+
+  var DATA = [
+    {
+      name: "AI發展歷程與生態系", short: "發展歷程", count: 36, key: "c1",
+      subtopics: [
+        { name: "AI發展史與智慧分級", points: [
+          ["圖靈測試定義AI智慧","1950年代圖靈（Turing）提出的AI智慧判斷法：若機器行為讓人無法辨識其身分，即視為具有智慧，是AI領域最早的智慧測試標準。",0],
+          ["專家系統的知識庫架構","1980年代盛行的AI程式，具備知識庫與推論機，依特定領域的邏輯規則回答或解決問題，代表案例為MYCIN血液傳染病診斷系統。",0],
+          ["強AI與弱AI的定義差異","弱人工智慧僅模仿人類特定能力（如物體辨識、語音辨識），不需完整認知能力；強人工智慧（通用人工智慧）追求與人類相同的推理思考解決問題能力，是AI研究的終極目標，兩者常被拿來互相混淆考。",1,[["弱人工智慧（Weak AI）","模仿人類特定能力，如物體辨識、語音辨識，不具備完整人類認知能力"],["強人工智慧（Strong AI／通用人工智慧）","與人類具有相同的推理、思考、解決問題能力，是AI學者的終極目標"]]],
+          ["AI寒冬的技術瓶頸成因","1970年代AI首次遇到瓶頸，原因是基礎理論不完備、計算複雜度呈指數成長、硬體運算能力不足，並非倫理道德疑慮——這是後期才出現的AI爭議，常被誤認為早期瓶頸原因。",1],
+          ["AI方法典範轉移：規則到統計","1986年倒傳遞演算法（Backward Propagation）重新發明為分水嶺，之後AI主流方法從早期「基於規則」的專家系統邏輯，轉為「基於統計」——直接從大量資料訓練模型找出規律，不需人工設計規則。",1,[["基於規則（Rule-based）","將人類思維邏輯轉換成規則教給電腦的早期AI方法"],["基於統計（Statistical-based）","在大量資料集中訓練模型讓電腦自己找出規律，為現代AI主流方法"]]],
+        ]},
+        { name: "AI蓬勃發展的驅動技術", points: [
+          ["雲端服務普及降低收集門檻","雲端服務普及讓大量資料可隨時隨地存放與管理，大幅降低資料收集與處理的硬體門檻，是AI蓬勃發展的三大支援技術之一。",0],
+          ["大數據系統支援資料處理","大數據系統提供高效率運算大量資料的平台，讓蒐集到的巨量原始資料得以被觀察與處理，是機器學習訓練資料處理的關鍵基礎。",0],
+          ["AI計算技術三大分支","機器學習、演化計算、資料探勘都屬於AI領域知名的計算技術分支；雲端運算則屬於支援性基礎架構，不算AI核心計算技術，此題易把支援技術誤認為AI技術本身。",1,[["機器學習（Machine Learning）","從資料中自動學習規律的AI技術分支"],["演化計算（Evolutionary Computation）","模擬生物演化機制（如基因演算法）求解問題的AI技術分支"],["資料探勘（Data Mining）","從大量資料中挖掘隱藏規律與知識的技術"]]],
+          ["GPU/TPU加速深度學習佈建","深度學習需要大量矩陣運算，GPU與Google專為深度學習開發的TPU等專用硬體，是讓深度學習模型能廣泛佈建於各領域的關鍵技術。",0,[["GPU（Graphics Processing Unit）","支援平行矩陣運算的繪圖處理器，廣泛用於深度學習訓練"],["TPU（Tensor Processing Unit）","Google專為深度學習開發的張量運算加速晶片"]]],
+        ]},
+        { name: "雲端運算服務與部署模式", points: [
+          ["雲端服務三層模型IaaS/PaaS/SaaS","依服務抽象層級分為IaaS（基礎設施，如Amazon EC2租用虛擬主機）、PaaS（平台，如Google App Engine免維護伺服器直接上傳程式）、SaaS（軟體，如Google文件協作終端使用者直接用軟體），三者提供的管理責任層級不同，是雲端服務題型的核心易混淆考點。",1,[["IaaS（Infrastructure as a Service）","提供基礎設施（主機、網路、儲存）租用服務，例：Amazon EC2"],["PaaS（Platform as a Service）","提供開發平台，開發者上傳程式即可運行不需維護伺服器，例：Google App Engine"],["SaaS（Software as a Service）","提供終端使用者直接使用的軟體服務，例：Google線上文件協作"]]],
+          ["雲端四種部署模式","依服務對象與所有權分為公有雲（如GCP對大眾開放）、私有雲（如學校自建機房僅服務內部）、社群雲（服務特定社群共享，題庫中從未當過正解、只作干擾選項）、混合雲（結合公有與私有雲以應付流量需求），是雲端架構考題的高頻混淆點。",1,[["公有雲（Public Cloud）","雲端服務廠商對大眾或企業集團開放的服務，如GCP"],["私有雲（Private Cloud）","僅服務單一組織的雲端架構，可自行或委外管理"],["社群雲（Community Cloud）","服務特定社群共享的雲端架構，題庫中常見的干擾選項"],["混合雲（Hybrid Cloud）","結合兩個以上獨立雲端架構並整合技術，兼具彈性與可攜性"]]],
+          ["虛擬化技術彈性分配資源","虛擬化技術將實體資源（CPU、硬碟、記憶體、伺服器）轉化後動態彈性配置給使用者，打破實體結構不可切割的限制，是雲端運算能依需求彈性配置資源的核心技術。",0],
+          ["容器與虛擬化技術的差異","容器技術比傳統虛擬化更輕薄短小、效能導向，代表技術有Docker（帶動容器化風潮）、Kubernetes（Google開發）、Amazon ECS（Amazon開發）；Spark屬於大數據運算技術而非容器技術，是本類常見的混淆干擾選項。",1,[["Docker","將容器技術帶入主流的代表工具"],["Kubernetes","Google開發的容器調度／編排技術"],["Amazon ECS","Amazon開發的容器管理服務"]]],
+        ]},
+        { name: "大數據技術與NoSQL", points: [
+          ["大數據4V特性","大數據常以4V描述特性：Volume（資料量龐大難儲存，如Facebook每日130TB log）、Velocity（產生速度快難即時處理，如Google每秒4萬次查詢）、Variety（資料種類多元，如Instagram文字/照片/影片並存）、Veracity（資料真實性/品質，題庫未直接考出但仍是4V完整定義的一環，容易被遺漏），是大數據題型必考的基礎架構。",1,[["Volume","資料量龐大到難以儲存與處理"],["Velocity","資料產生速度快，難以即時處理"],["Variety","資料型態種類多元，需新型資料庫因應"],["Veracity","資料的真實性與品質，4V定義中易被忽略但仍應掌握的一項"]]],
+          ["訊息佇列作為資料收集中介","訊息佇列是收集資料與處理資料之間的中介系統，常見技術有Kafka、RabbitMQ、Google PubSub；Amazon EC2是虛擬化主機服務而非訊息佇列，是常見混淆的干擾選項。",1,[["Kafka","分散式訊息佇列系統"],["RabbitMQ","訊息佇列中介軟體"],["Google PubSub","Google的發布／訂閱訊息服務"]]],
+          ["批次處理與即時處理效能指標","大數據系統依需求分為批次處理（如Hadoop MapReduce）與即時處理（如Apache Storm、Spark-Streaming）；批次系統著重高吞吐量與規模化處理能力，低延遲則是即時系統才需要的效能指標，是常考的混淆點。",1,[["批次處理（Batch Processing）","定期處理大量累積資料，如Hadoop MapReduce，重視高吞吐量"],["即時處理（Stream Processing）","即時處理持續產生的資料，如Apache Storm、Spark-Streaming，重視低延遲"]]],
+          ["NoSQL與關聯式資料庫的區別","關聯式資料庫（如MariaDB）適合小規模高頻讀寫或大批次少存取的結構化資料，處理大數據效能不佳；NoSQL不需固定表格模式（Schema-less）且具高度延展性，是為解決大數據處理問題而生。",0],
+          ["四種NoSQL資料庫的應用選擇","依應用場景選用不同NoSQL：Neo4j（圖形資料庫，適合社交關係如LinkedIn Connection）、MongoDB（文件資料庫，適合半結構化內容如部落格圖文貼文）、Redis（in-memory資料庫，適合低延遲需求如線上遊戲即時互動，缺點是未持久化時關機會遺失資料）、HBase（Key-Value資料庫，取消固定Schema，適合大量獨立資料如120TB電子郵件儲存），是本類別最容易搞混的高頻考點。",1,[["Neo4j","圖形（Graph）資料庫，儲存節點間關係，適合社交網路連結"],["MongoDB","文件型資料庫，儲存半結構化文件，適合圖文並存的內容"],["Redis","in-memory資料庫，讀寫速度快、常作快取，未持久化則關機遺失資料"],["HBase","Key-Value型NoSQL，取消固定Schema，具高擴充與分散式特性"]]],
+        ]},
+        { name: "AI產業生態系與企業角色", points: [
+          ["企業AI團隊的典型角色","企業組建AI團隊常見角色包含機器學習科學家、資料科學家、軟體工程師、產品經理，銷售人員一般不屬於典型AI團隊角色組成，是常見誤答選項。",0],
+          ["企業參與AI的四種角度","企業投入AI產業可分四種角度：AI平台供應者（將AI技術包裝成服務供他人使用，如Microsoft認知服務API、Appier Axion決策平台）、AI內容供應者（提供AI學習資源，如Google的Machine Learning Crash Course）、AI+（以AI衍生全新產業，如Amazon Alexa語音助理、自駕車）、+AI（既有行業導入AI提升表現，如新漢清大咖啡豆瑕疵檢測、中山醫大肺炎診斷模型），四者定義相近極易混淆，是本類別最高頻考點。",1,[["AI平台供應者","將AI技術包裝成服務或API供他人使用，降低使用門檻，如Microsoft認知服務、Appier Axion"],["AI內容供應者","提供AI相關教材、課程、論壇等學習資源，如Google ML Crash Course"],["AI+","以AI技術衍生出全新型態產業鏈，如Amazon Alexa語音助理、自駕車"],["+AI","既有行業導入AI技術以提升原有表現，如咖啡豆瑕疵檢測、肺炎診斷模型"]]],
+          ["終端設備AI晶片vs數據中心晶片","支援終端設備（手機、裝置端）執行AI運算的晶片包括iPhone X的Face ID晶片、Google的Pixel Visual Core、Intel的Neural Compute Stick；Nvidia的Tesla P100晶片則是用於數據中心的GPU加速器，並非終端設備硬體，是常見混淆點。",1,[["Pixel Visual Core","Google手機終端的影像處理AI晶片"],["Neural Compute Stick","Intel推出的終端AI運算加速棒"],["Tesla P100","Nvidia數據中心用GPU加速晶片，非終端設備產品"]]],
+        ]},
+      ]
+    },
+    {
+      name: "AI應用領域與產業發展", short: "應用領域", count: 36, key: "c2",
+      subtopics: [
+        { name: "自駕車分級與關鍵技術", points: [
+          ["自駕車SAE六級分級標準","自駕車依SAE分級系統分為Level0~5：Level0無自駕功能僅特定狀況示警，Level1可執行加減速或轉彎其中一項，Level2可同時執行加減速與轉彎但仍須監看並扶方向盤，Level3特定情境(如高速公路)可完全不用人為操作但需能隨時接手，Level4除大雨、下雪、強光等特殊情境外可全自駕，Level5完全不需人為參與；Level0~2須握方向盤、Level3~5可不需握，是判斷考題的關鍵分界。",1,[["Level 0","無自駕功能，僅在特定狀況下發出警報"],["Level 1","同一時間僅能執行加減速、轉彎其中一項"],["Level 2","同一時間可同時執行加減速、轉彎多項任務，仍須監看並扶方向盤"],["Level 3","特定情境(如高速公路)可完全不用人為操作，但須能隨時接手，可不扶方向盤"],["Level 4","除大雨、下雪、強光等特殊情境外可全自駕"],["Level 5","完全自動駕駛，全程不需人為參與"]]],
+          ["LiDAR光學雷達應用案例","2018年奧迪發表全球首輛量產搭載光學雷達(LiDAR)的自駕車，其Traffic Jam Pilot功能只在高速公路、車速60公里以下的塞車情境才能啟用，屬於Level 3等級的典型應用案例，常結合等級判斷一起考。",1],
+          ["自駕車三大研究議題不含臉部辨識","自駕車重要研究議題包含感測器技術(偵測鄰近車輛距離避免碰撞)、超精細解析度地圖(輔助市區道路行駛)、物體偵測技術(辨識路標行人等重要物體)；臉部辨識技術目前並非自駕車必要研究項目，是常見誘答選項。",1,[["感測器技術","偵測與鄰近車輛距離避免碰撞"],["超精細解析度地圖","輔助車輛於市區道路精準定位行駛"],["物體偵測技術","辨識影像中路標、行人等重要物體"]]],
+        ]},
+        { name: "智慧城市與智慧治理", points: [
+          ["智慧城市四大願景不含政府營收","智慧城市藉由收集居民與城市互動的資料，目標在提升連結性、改善環境品質、節省能源與成本，讓生活與工作效率更好；「創造政府更多營收」並非智慧城市核心願景，常作誘答選項。",1],
+          ["電動車節能效益常被高估","智慧城市節能減碳措施常見智慧照明、車輛共乘、智慧調控巴士間距；電動車充電網路雖便利，但因發電、輸配電到充電的多層能源轉換損耗大，能源利用率未必高於傳統機動車輛，未必能達到節能減碳效果，是常見誘答陷阱。",1],
+          ["智慧電網雙向溝通特性","智慧電網(Smart Grid)與傳統電網最大差異在於能實現「雙向」資訊溝通，用戶可透過智慧電表查詢即時供電能力、電能品質、電價浮動與停電資訊；誤以為供電方向仍為單向是常見錯誤選項。",1,[["智慧電網 Smart Grid","可雙向溝通的電網，用戶可即時掌握供電與電價資訊"],["智慧電表 Smart Meter","讓民眾即時了解自家用電情形的裝置，是智慧電網的基礎建設"]]],
+          ["智慧政府聚焦服務非人力精簡","智慧政府議題著重線上服務建置、開放資料程度、個人隱私保護措施，以擴大全民參與；公務人員數量多寡並不在智慧政府討論範圍內，是常見誘答項。",0],
+          ["銀髮族照護聚焦遠距居家非蓋安養院","智慧城市銀髮族照護聚焦健康管理、疾病預防／診斷／治療、復健療後照護的遠距居家服務，具體措施包含遠端照護平台、意外通報平台、生命徵象雲端管理平台，而非額外「依照需求設置安養院」，是常見誘答選項。",0],
+          ["交通資訊蒐集管道不含車聯網","目前智慧城市收集交通資訊的管道包含智慧卡使用紀錄、高速公路自動收費系統(ETC)、紅外線監視系統(偵測車流量計算交通量)；車聯網(V2X)技術目前尚未成熟，尚未實際應用於交通資訊蒐集，是常見誘答選項。",1,[["智慧卡使用紀錄","記錄民眾搭乘公共運輸的使用資料，可用於分析交通模式"],["高速公路自動收費系統 ETC","透過電子收費系統間接統計車流資訊"],["車聯網 V2X","車輛間互聯通訊技術，目前尚未成熟，未被實際應用於交通資料蒐集"]]],
+          ["智慧移動著重公共運輸非私有車輛","智慧移動(Smart Mobility)著重運輸設施與ICT整合程度、公共運輸利用率、綠色與非機動性運輸使用量，目標是減少個人對機動車輛的需求；居民自身擁有運輸設備的種類與數量並非其議題重點。",0],
+          ["空氣盒子低成本高即時但精確度較低","政府發放空氣盒子(對比大型空污觀測站)的優點是安裝成本低、即時性高，缺點是準確度較差、需居民自行安裝設定，且若非可信單位發放可能有隱私疑慮；「精確度更高」是常見誤答選項，實際上空氣盒子精確度不及專業觀測站。",1],
+        ]},
+        { name: "智慧家庭與AIoT", points: [
+          ["智慧音箱電商整合三大難題","智慧音箱除Amazon外，多數廠牌尚未完整整合電商功能，主因在於商品呈現方式與傳統實體差異巨大、與既有第三方電商服務整合困難、以及支付流程複雜且需在便利與防誤用間取得平衡；語音辨識率不足並非主要原因，是常見誘答選項。",1],
+          ["邊緣運算(Edge Computing)定義","邊緣運算是將感測到的資料在設備本身(單點)就地進行運算並得出結果以實現智慧功能，可提升效能並降低通訊成本；與將資料傳回雲端統一運算(雲端運算)、或多設備分散式運算的作法不同，是常考的定義辨析題。",1,[["邊緣運算 Edge Computing","資料於設備本身就地運算，減少傳輸延遲與通訊成本"],["雲端運算","資料傳回雲端伺服器統一運算後回傳結果"],["分散式運算","智慧功能內建在數個設備上，分散進行運算"]]],
+          ["AI語音助理產品與Azure的混淆","著名AI語音助理產品包含Google Assistant、Amazon Echo(Alexa)、Apple Siri、Microsoft Cortana；Microsoft Azure為微軟的雲端運算平台而非語音助理產品，是常見混淆選項。",1,[["Microsoft Cortana","微軟旗下的AI語音助理產品"],["Microsoft Azure","微軟雲端運算平台，並非語音助理，常與Cortana混淆"]]],
+          ["智慧家庭三大雲端服務業者","目前市面上三大支援智慧家庭雲端服務業者為Apple、Google、Amazon，各自支援工具分別是Apple HomeKit、Google Home、Amazon Smart Home Skill API；Facebook並未提供此類智慧家庭雲端服務整合工具，是常見誘答選項。",1,[["Apple HomeKit","蘋果的智慧家庭裝置整合框架"],["Google Home","Google智慧家庭裝置整合平台"],["Amazon Smart Home Skill API","Amazon提供智慧家庭裝置串接Alexa的API"]]],
+          ["智慧家電通訊技術：短距低功率為主","智慧家電多採用ZigBee、WiFi、Bluetooth等短距離低功率通訊技術；LTE屬手機與基地台間的長距離高功率通訊技術，較耗電且傳輸距離長，並不適用於資料量小的近距離智慧家庭場景，是常見誘答選項。",1,[["ZigBee","低功耗短距離無線通訊協定，常用於智慧家電"],["LTE","行動通訊技術，功率高、距離長，不適合智慧家庭近距離小量傳輸"]]],
+          ["通訊標準不一致的三種解方","面對智慧家電通訊標準不一致，目前的解方包含以雲端服務作為統合平台串連家電、選用支援多重標準的裝置、在家中加裝閘道器(Gateway)作為中介；安裝AI語音助理本身並不具備解決通訊標準不一致的功能，是常見誘答選項。",0],
+          ["IoT負責感測傳輸，AI負責分析運算","在AIoT架構中，物聯網(IoT)主要負責建立可連網硬體、進行資料感測、收集與彙整、以及資料傳輸；人工智慧(AI)則負責資料前處理、執行機器學習演算法、發展適合終端設備的輕量化演算法，兩者分工常被互相誤植，是高頻考點。",1,[["IoT 物聯網","負責硬體連網、資料感測收集與傳輸"],["AI 人工智慧","負責資料分析、前處理與機器學習演算法"],["AIoT","AI與IoT匯流進化的整合應用概念，驅動智慧應用發展"]]],
+          ["AI與IoT結合的三大挑戰方向","結合AI與IoT的挑戰與發展方向聚焦於AI應用的系統安全性(尤其涉及個人資訊)、發展適用終端的輕量化演算法、發展低功耗運算晶片；「加強雲端服務與終端裝備的連結」並非其挑戰重點，屬誘答選項。",0],
+        ]},
+        { name: "智慧製造 Industry 4.0", points: [
+          ["智慧製造關鍵技術不含精密機械","智慧製造(具資訊自感知、自決策、自執行功能的先進製造模式)關鍵技術在於物聯網、大數據、雲端計算、人工智慧等新一代資訊技術的深度融合；「精密機械」本身並非其關鍵技術範疇，屬誘答選項。",1,[["物聯網 IoT","硬體連網感測技術，智慧製造關鍵技術之一"],["雲端計算","運算資源集中處理，智慧製造關鍵技術之一"]]],
+          ["智慧製造效益是流程最佳化非多樣化","智慧製造系統透過收集資訊進行製造流程最佳化，效益包含生產線遠端監控、整廠數據串連、預測性維護(預測機器損耗程度)；「增加工廠內生產產品的多樣性」並非其直接效益，是常見誘答選項。",1],
+          ["引入智慧製造應先考慮資料蒐集","產業引入智慧製造時應優先考慮的是取得工廠設備與環境資料的方法(如加裝感測器讓設備連網)，而非一開始就砸大錢購買工業4.0新設備；重點是先建立數據收集能力，再談後續分析與決策最佳化。",1,[["工業4.0","以智慧製造為核心的第四次工業革命概念，非引入智慧製造的必要起手式"],["預測性維護","透過數據預測設備耗損、提前保養的智慧製造應用"]]],
+        ]},
+        { name: "AI客服與FinTech應用", points: [
+          ["AI客服核心是聊天機器人非必開發APP","成功的AI客服系統以聊天機器人作為與客戶互動的介面，搭配條列式問答資料庫回答問題，遇無法處理情形則轉接專業客服人員；聊天機器人可建構於現有通訊軟體上，不一定需要另外開發手機APP，是常見誘答選項。",1],
+          ["FinTech四大成熟AI應用類型","FinTech中較成熟的AI應用可分四類：對抗詐欺風險(如車禍理賠圖像比對抓詐保)、管控經營風險(企業外部評估與輿情分析)、消除風險、精準行銷(依個人特徵與資產數據推銷適當商品)；題目常給情境要求判斷屬於哪一類，需仔細分辨關鍵字。",1,[["對抗詐欺風險","利用機器學習比對歷史資料辨識詐保等詐欺案件"],["管控經營風險","收集分析輿情與外部評估資訊，供交易合作對象的風險判斷"],["消除風險","FinTech AI應用分類之一，降低整體營運不確定性"],["精準行銷","依個人特徵、資產數據推薦適當商品，避免品項雷同或老舊"]]],
+          ["圖像識別於車禍理賠詐欺偵測案例","利用歷史理賠資料(經專業人員標記是否詐保)搭配圖像識別與文件內容識別技術比對車禍圖像，判定是否理賠，屬於「對抗詐欺風險」的FinTech應用，中國大型保險公司靠此技術每年可識別3,000萬件欺詐案，取代過去耗時的人工處理。",0],
+        ]},
+        { name: "智慧醫療 AIoH 與電腦視覺應用", points: [
+          ["電腦視覺常見應用不含語音辨識","電腦視覺技術透過辨識、處理影像資料發展應用，常見案例有車牌辨識系統、無人商店自動結帳、Face ID臉部辨識；YouTube自動字幕產生器是將語音轉文字，屬於語音辨識技術而非電腦視覺，是常見誘答選項。",1,[["電腦視覺","透過辨識與處理影像資料獲得資訊的AI技術"],["語音辨識","將語音訊號轉換為文字的技術，與電腦視覺是不同的AI領域"]]],
+          ["AI醫療應用案例：雲端用藥系統非AI","AI應用在醫療領域的案例包含接收各種感應器訊息重建醫療影像、解讀X光片判斷肺炎、AI系統給出癌症判斷與治療建議；供醫生查詢病人用藥紀錄的雲端用藥系統，本質是雲端資料庫查詢系統，並非AI應用，是常見誘答選項。",1],
+          ["AIoH（AI+Health）定義與應用範例","AIoH（AI+Health）指伴隨AI與感測技術突破，將人體重要生理資訊透過智慧裝置感測、呈現並分析，發展出的智慧醫療各種應用，例如自駕車防睡眠裝置、協助漸凍人與外界溝通的腦機介面技術、皮膚癌AI診斷軟體；指紋辨識解鎖系統屬於生物辨識技術，並非AIoH應用範圍，是常見誘答選項。",1,[["AIoH (AI+Health)","結合AI與健康感測數據分析發展智慧醫療應用的概念"],["腦機介面技術 BCI","協助漸凍人等病患透過腦波與外界溝通的技術，屬AIoH應用範例"],["皮膚癌AI診斷軟體","透過影像分析輔助皮膚癌篩檢診斷的AIoH應用"],["生物辨識技術","如指紋辨識，用生物特徵區分個體的技術，不屬於AIoH範圍"]]],
+          ["AIoH首要議題：隱私與醫療倫理","AIoH因資料來源是人體生理數據，最先應考慮的議題是個人隱私與醫療倫理，不能在未經授權情形下擅自收集個人生理訊息；製作高精確度硬體、應用實用性、專業人員驗證則是後續考量重點。",1],
+          ["台灣AIoH優勢在健保資料庫非硬體","台灣在AIoH領域的獨特優勢在於健保資料庫完整保存病人身體訊號與診斷紀錄，因規範嚴格而擁有大量高精確度醫療資料可作為AI模型訓練資料，連IBM Watson Health華生系統都需與台灣合作，而非精密醫療設備或晶片製造技術領先。",1],
+          ["人類+AI原則：輔助醫事人員非取代","IBM Watson Health健康長瑞伊博士提出醫療AI三大原則(目的、透明、技能)，主張「人類+AI」用於幫助臨床醫療人員、管理人員、健康IT專業人員加速診斷、減低誤差，而非取代人類；此類AI不適合一般民眾直接使用，因缺乏足夠專業知能正確解讀，是常見誘答選項。",1],
+          ["平等醫療：AI補足人力短缺初步診斷","「平等醫療」概念下，AI角色是代替人手短缺的醫生對病人做初步診斷，讓資源不足地區也能取得基礎醫療判斷(如FAMMG等大型企業投入此目標)，而非取代醫生治療或直接進行財產分配，是常見誘答選項。",0,[["平等醫療","透過AI縮小因社會、經濟、教育等不平等造成的醫療落差"],["FAMMG","Facebook/Apple/Microsoft/Amazon/Google等大型科技企業合稱，投入平等醫療等AI應用"]]],
+        ]},
+      ]
+    },
+    {
+      name: "AI演算法及專家系統", short: "演算法", count: 67, key: "c3",
+      subtopics: [
+        { name: "狀態空間搜尋演算法", points: [
+          ["圖靈測試的實務限制","圖靈測試(Turing Test)需兩個自然人參與且過程具隨機性,兩次結果不保證相同,雖有爭議但因無更好替代方案,至今仍是AI系統競賽採用的主流檢測方式。",0],
+          ["狀態空間的基本組成","狀態空間以起始狀態與目標狀態集合表示所有可能情況,節點間僅在具合法移動步驟的對應狀態間才存在方向鏈結。",0,[["起始狀態(Starting State)","問題求解的初始情況,可以是單一或多種"],["目標狀態(Goal State)","問題求解要達成的情況,可以是單一或多種"],["方向鏈結(Arc)","僅存在於具合法移動步驟對應的兩個狀態節點間"]]],
+          ["深度優先搜尋(DFS)","由起點開始沿單一分支持續往下走,碰到已走過的狀態才回溯,每狀態僅拜訪一次,屬於窮舉式搜尋,可搭配堆疊實作,但不保證找到最佳解。",1,[["窮舉式搜尋(Exhaustive Search)","檢查所有可能狀態的搜尋方式,DFS/BFS皆屬此類"],["堆疊(Stack)","DFS常用的資料結構,後進先出以支援回溯"]]],
+          ["廣度優先搜尋(BFS)","由起點開始逐層檢查完該層所有鄰近狀態才進入下一層,每狀態僅拜訪一次,同屬窮舉式搜尋,可搭配佇列實作,同樣不保證找到最佳解。",1,[["佇列(Queue)","BFS常用的資料結構,先進先出以支援逐層搜尋"]]],
+          ["最佳優先搜尋(Best-First)","隨時記錄尚未檢查的子節點分數資訊,並維持分數最佳者排在最前面,當所有新狀態分數都比目前差時,可回頭取出未走過之分數最佳者重新搜尋。",0],
+          ["爬山搜尋法(Hill Climbing)","只考慮目前分支中分數最佳的狀態,不保留其他兄弟節點資訊,因此無法回頭重新搜尋,容易陷入局部較佳解,嚴格來說並不完全符合最佳優先搜尋的定義。",1,[["局部較佳解(Local Maxima)","爬山法因無法回頭而卡在的非全域最佳解"]]],
+          ["A*搜尋演算法","屬於一種最佳優先、非窮舉式的啟發式搜尋法,評分公式為f(n)=g(n)+h(n),一般搭配優先佇列實作,適用於單人遊戲決策問題(如8拼圖)。",1,[["g(n)","從起始狀態到目前狀態實際已支付的代價"],["h(n)","啟發式函數估計目前狀態到目標狀態的代價"],["優先佇列(Priority Queue)","A*常搭配的資料結構,依分數排序取出下一個展開節點"]]],
+          ["A*找到最佳解的條件","當啟發式函數h(n)滿足不高估(低估或相等於)從目前狀態到目標狀態的真實代價時,配合分數最佳優先搜尋即可保證A*找到最佳解;若h(n)恆為0,A*會退化成廣度優先搜尋,而非深度優先搜尋。",1],
+          ["MinMax、Alpha-Beta剪枝與A*的比較","MinMax適用雙人對戰遊戲,若對手先下分數計算須先取Min再取Max;Alpha-Beta剪枝是省略無用分支的進階版MinMax,運作較複雜、並非與MinMax完全相同;A*則適用單人遊戲且效率通常優於窮舉式動態規劃法,也常用於NPC路徑搜尋。",1,[["MinMax搜尋","雙人零和對戰遊戲的分數評估搜尋法,先取Min再取Max視對手行動而定"],["Alpha-Beta剪枝(Prune)","省略MinMax搜尋樹中無用分支以加速的進階技術"],["Dijkstra演算法","窮舉式動態規劃最短路徑演算法,效率通常不如A*"]]],
+        ]},
+        { name: "述語邏輯與知識推論", points: [
+          ["述語邏輯的基本符號","述語邏輯常用符號表達「所有」「存在」「否定」三種邏輯關係,可組合表達複雜的邏輯敘述。",1,[["∀(全稱量詞)","所有存在元素皆滿足後續的邏輯描述"],["∃(存在量詞)","至少存在一個元素滿足後續的邏輯描述"],["¬(否定)","表示Not,對後續邏輯描述取反"]]],
+          ["一階與二階述語邏輯","一階述語邏輯中函數或關係必須是固定性質的;若像Likes(george,kate)這樣同時可能代表多種喜歡關係(如師生、上司下屬等),則屬於二階述語邏輯,不符合一階定義。",1,[["一階述語邏輯","關係/函數性質固定的述語邏輯"],["二階述語邏輯","關係可代表多重意涵的述語邏輯"]]],
+          ["述語邏輯優於命題邏輯","述語邏輯比一般命題邏輯多了類似函數或關係的概念,表達能力較強,且描述中可加入布林邏輯運算(AND/OR/NOT)及變數代表一般物件。",0],
+          ["特例化(Instantiation)","將全稱敘述中的變數代入具體個例以進行推論的處理方式,例如由「所有人類都會老」搭配「蘇格拉底是人」成立,經特例化可推得「蘇格拉底會老」成立。",0],
+          ["一致化(Unify)","在述語邏輯中,將變數賦予適當值,使兩個邏輯敘述達到完全等效(同樣意思)目的的處理程序,常用於將規則中的變數代入已知事實以利後續推論。",1],
+        ]},
+        { name: "專家系統基礎", points: [
+          ["專家系統的定義與目的","專家系統是需要專家知識才能建置和運作的資訊系統,目的是協助一般使用者達成該領域專家等級的工作,不需要資訊科技專家即可建置,也不需要使用者本身是專家才能操作。",1],
+          ["系統外殼(System Shell)","專家系統的設計理念之一,只要抽換領域知識就能建置一套新的專家系統,因此不強調程式撰寫,也不一定需要搭配程式整合開發環境。",0,[["系統外殼(System Shell)","可抽換領域知識即重複使用建置新專家系統的核心架構"]]],
+          ["專家系統必要組成","專家系統一定需包含人機介面、推論子系統、(推論結果)解釋子系統,以及專家規則及已知事實的知識庫;不含程式整合開發環境,目前技術上也尚無法提供商業用途的自動化知識一致性檢核模組。",1],
+          ["專家系統的解釋能力","專家系統的解釋子系統將推論模組運作的過程(所使用的規則群組)套入對話模板呈現給使用者,只適合回答How及Why類型的問題,無法回答When或Where。",1,[["How類型解釋","如何獲得目前的推論成果"],["Why類型解釋","系統為何如此答覆使用者的原因或理由"]]],
+          ["適合發展專家系統的問題特性","適合採用符號邏輯推論、範圍固定不過大的特定領域問題,且需要大量專家知識才能求解;不適合解決常識性、天馬行空或一般計算式演算法就能順利解決的問題。",0],
+          ["專家系統的成長型特性","專家系統的內部專家知識可透過專門的知識庫編輯介面不斷新增修改,故隸屬於「成長型」的資訊系統,而非建置完成後就不可修改。",0],
+          ["專家系統實例辨識","分子結構決定、地質資料礦產開發等屬於典型專家系統;而具語音功能的自動提款機、一般聊天機器人或防毒系統因欠缺推理與解釋能力,並不算是專家系統。",1,[["DENDRAL","決定複雜有機化合物分子結構的專家系統"],["Dipmeter","分析地質資料的多種礦產開發專家系統"]]],
+        ]},
+        { name: "產生式規則系統與推論方向", points: [
+          ["產生式系統組成","產生式系統包含一堆產生式規則、工作記憶區、以及辨識和運作循環三大要素;推論解釋子模組則是專家系統才具備的特色,一般產生式系統不需要。",1,[["工作記憶區(Working Memory)","紀錄目前已滿足事實及正在檢查規則的區域"],["辨識和運作循環(Recognize-Act Cycle)","比對規則前題與觸發規則動作的重複循環"]]],
+          ["規則觸發順序與衝突解決","規則觸發(前題滿足)一般從第一條依序往後檢查,滿足即停止,故規則排列順序會影響推論結果;多條規則同時滿足前題稱為衝突解決,常見作法是只執行第一條被觸發的規則,也可由專家人工清理,並非唯一正確方法。",1,[["衝突解決(Conflict Resolution)","多條規則前題同時滿足時如何選擇執行哪一條"]]],
+          ["規則的階層與牴觸","規則間可能具有階層關係,某條規則的結論可作為其他規則的前題,故規則觸發與否常需多次而非單次檢查;規則牴觸可透過將新增且較正確的規則排在前面來緩解。",0],
+          ["三種專家系統推論導向","專家系統依知識和推理形式可分為規則導向、模型導向、案例導向三種,三者各有優缺點但理論上無法完全相容並存。",1,[["規則導向(Rule-based)","以經驗法則規則表達知識,缺乏完整理論架構"],["模型導向(Model-based)","需完整功能與理論架構知識,完整性需求最高"],["案例導向(Case-based)","直接套用歷史案例縮短推論過程"]]],
+          ["前向推論(Forward Reasoning)","又稱資料驅動的推論方式,由已知事實往目標結論推論,幾乎所有事實資料需在初始階段完整提供,適用於規則多且事實已明確的問題。",1,[["資料驅動(Data-Driven)","前向推論的別稱,強調從已知資料出發"]]],
+          ["後向推論(Backward Reasoning)","又稱目標驅動的推論方式,由想達成的目標結論回頭檢查規則前題所需事實是否滿足,適用於難以形成目標或假設的問題(如醫師先懷疑疾病再安排檢測)。",1,[["目標驅動(Goal-Driven)","後向推論的別稱,強調從欲達成目標出發"]]],
+          ["雙向推論與證據推理","除前向與後向推論外,同時由事實及目標結論往中間進行的稱為雙向推論;由已知事實逐一檢測,計算並逐步調整各種可能狀況發生機率的方式,稱為證據推理。",1,[["雙向推論(Bi-directional Reasoning)","同時由事實端與目標端往中間推論的方式"],["證據推理(Evidential Reasoning)","逐一檢測事實並調整各種狀況發生機率的推論方式"]]],
+          ["推論方向的選擇原則","前向或後向推論的選擇應依問題本身特性,挑選可能產生較少推論分支的方式進行,並非固定選用某一種方向;推論方向與搜尋順序(深度優先/廣度優先)是兩個獨立維度,可任意搭配。",1],
+        ]},
+        { name: "模糊邏輯與模糊系統", points: [
+          ["模糊邏輯的基本運作","模糊邏輯須先制定隸屬度函數和模糊規則才能運作,本身著重語意表達與邏輯推論功能,並不包含機器學習能力,常用於自動控制領域。",1],
+          ["隸屬度函數(Membership Function)","相對傳統集合論每個元素僅能是0或1,模糊集合賦予每個元素一個介於0與1間的隸屬程度值,函數型態可分離散型和連續型。",0,[["三角形函數(Triangular)","常見的隸屬度函數型態,便於計算,常用於輸出變數"],["梯形函數(Trapezoidal)","另一種常見的隸屬度函數型態"]]],
+          ["隸屬度函數的來源","隸屬度函數可由單一使用者或專家制定、問卷調查多位使用者或專家意見平均計算、對既有函數進行擴展及集中運算調整,或利用機器學習技術獲得。",1,[["擴展(Dilation)","對既有隸屬度函數放大範圍以產生新函數的運算"],["集中(Concentration)","對既有隸屬度函數縮小範圍以產生新函數的運算"],["ANFIS","結合類神經網路與模糊邏輯,可從訓練範例學習隸屬度函數"]]],
+          ["T-norm與S-norm運算子","T-norm運算子(如取較小值、取乘積)適用於模糊集合間的交集運算,S-norm運算子適用於聯集運算;模糊規則表示式適合用CNF而非DNF。",1,[["T-norm運算子","模糊集合交集(AND)運算,如Min或乘積"],["S-norm運算子","模糊集合聯集(OR)運算"],["CNF(合取範式)","模糊規則前題條件以邏輯AND串聯的表示形式"]]],
+          ["解模糊化(Defuzzification)","解模糊化的目的是找到一個特定的輸出變數數值,代表所有模糊規則輸出整合後的面積,模糊系統的規則輸出需先整合才能解模糊化。",1,[["面積中心法(Centroid of Area)","以整合輸出面積的重心作為解模糊化結果"],["面積二分法(Bisector of Area)","以整合輸出面積對半分割點作為解模糊化結果"]]],
+          ["三種模糊推論模式","Mamdani模式的規則結論為一般模糊函數,計算需複雜的解模糊化技術;Sugeno模式的規則結論以多項式表達,計算過程無需解模糊化(以加權平均輸出);Tsukamoto模式的規則結論為單調模糊函數,幾乎不需或僅需最簡單的解模糊化技術。",1,[["Mamdani模式","規則結論為一般模糊函數,需複雜解模糊化"],["Sugeno模式","規則結論為多項式,以加權平均輸出、無需解模糊化"],["Tsukamoto模式","規則結論為單調模糊函數,僅需簡單解模糊化"]]],
+          ["模糊系統與一般規則系統的差異","模糊系統中所有規則都會被觸發且需經整合,一般規則系統則只有單一規則被觸發、不需整合;部分模糊系統的規則輸出需額外解模糊化,但兩者最終輸出並非總能輕易區分。",0],
+          ["模糊系統的設計步驟","設計模糊系統隸屬函數的正確順序為:(1)選定描述的語意變數(如「年紀」)→(2)選定描述的語意值(如「年輕、中年、老年」)→(3)選定常見適用的隸屬函數類型(如三角隸屬函數)→(4)選定適合的隸屬函數參數(如控制點位置)。",0],
+          ["模糊邏輯的應用範例","模糊邏輯常用於自動控制領域,如一鍵控制洗衣機、自動平衡的反向桿車、只標示冷熱的空調系統;而AlphaGo打敗棋王主要採用深度學習類神經網路技術,並非模糊邏輯應用,是常見混淆點。",1,[["反向桿(Inverted Pendulum)","模糊邏輯自動平衡控制的經典應用案例"],["AlphaGo","採用深度學習類神經網路技術,非模糊邏輯應用"]]],
+        ]},
+        { name: "知識表達方式", points: [
+          ["框架(Frame)知識表達","框架是一種呈現物件導向特性的階層式知識表達法,每個概念表示為具有多個屬性槽和對應值的結構,可透過繼承取得預設特性,允許屬性槽名或值留空待新例產生時再設定。",1,[["屬性槽(Slot)","框架中用來描述概念特性的欄位名稱"],["繼承","框架下層概念可取得上層預設特性的機制"]]],
+          ["框架的鏈結關係","框架概念間的有向鏈結不僅能代表概念包含關係,也可以是特例關係或隸屬種類關係等多種語意;框架也允許加入必要條件描述及具處理功能的程序附加。",1,[["specialization of","框架中表示特例關係的屬性槽名"],["superclass","框架中表示隸屬種類(父類別)關係的屬性槽名"],["程序附加(Procedural Attachment)","框架中可附加具處理功能的程序"]]],
+          ["框架的階層式描述","框架允許上一層屬性槽的對應值與下一層概念名稱相同,以利闡述該概念的詳細資料,這是階層式知識表示法的正常用法,並非違反規則的錯誤寫法。",0],
+          ["語意網路(Semantic Network)","語意網路是一種表達一堆分類過後概念間語意關係(如繼承、隸屬)的知識表達方式,所描述的概念常被組織成分類階層,下層概念可繼承上層特性,但也可能被自身特性遮蓋(如企鵝繼承鳥類會飛的特性,但被自身不會飛的特性遮蓋)。",1],
+          ["語意三元組與表達能力","標準語意網路常以語意三元組表示,即「主詞＋關係＋受詞」;因所用「關係」無明顯限制條件,而一階述語邏輯中的「關係」須為固定性質,故一般認為語意網路的表達能力較高。",1,[["語意三元組(Semantic Triples)","主詞+關係+受詞的語意網路表示形式"]]],
+          ["語意網路的圖形方向性","語意網路依語意關係性質可為有向圖形或無向圖形,並非必定是有向圖形;例如「小王認識小明」若為互相關係則屬於無向圖形範例。",0],
+          ["WordNet","WordNet是描述字詞間關係(如同義、相反、部分)的知名語意網路應用範例,現多用於自然語言處理領域,如作為字典的知識表達方式。",0],
+          ["其他知識表達方式","常見的知識表達方式除框架、語意網路外,還包括規則與黑板模型;「知識地圖」「知識連接圖」「概念分類圖」則非標準AI知識表達分類,屬於考題常見的干擾選項。",1,[["規則(Rule)","以IF...THEN或述語邏輯形式表達知識"],["黑板模型(Blackboard)","另一種知識表達/推論架構模型"]]],
+        ]},
+      ]
+    },
+    {
+      name: "AI機器學習原理", short: "機器學習", count: 63, key: "c4",
+      subtopics: [
+        { name: "模型評估指標與過擬合欠擬合", points: [
+          ["偏差與變異的權衡","高偏差(Bias)代表模型過於簡單、擬合能力不足(欠擬合)；高變異(Variance)代表模型過於複雜、對訓練資料過度敏感(過擬合)；兩者之間存在此消彼長的Trade-off關係，最佳模型追求兩者皆低。",1,[["偏差 Bias","模型預測值與真實值之間系統性的誤差，過高代表模型過於簡化"],["變異 Variance","模型對訓練資料微小變動的敏感程度，過高代表模型過於複雜、易過擬合"]]],
+          ["不平衡資料的評估陷阱","當二元分類資料類別極度不平衡時(如詐騙偵測)，即使準確率(Accuracy)高達99%也可能只是模型全猜多數類別，此時應改用F1-Score或AUC(Area Under Curve，ROC曲線下面積，衡量分類模型整體區辨能力)等指標評估。",1],
+          ["過擬合的緩解方法","常見有效做法包括減少模型複雜度、蒐集更多訓練資料、使用正則化(Regularization)；但增加訓練時間並不能緩解過擬合，反而可能使情形更嚴重，且測試集的錯誤率不會隨模型複雜度提升而必然下降。",1],
+          ["訓練集測試集切分原則","訓練集通常佔總資料集70%以上，但確切比例須依資料集大小與問題性質判斷，並非固定比例。",0],
+          ["F1-Score與F2-Score","F1-Score是精準率(Precision)與召回率(Recall)的調和平均數，計算公式為(2×Precision×Recall)/(Precision+Recall)；F-Beta Score可透過常數調整兩者權重，Beta為2時即F2-Score，更強調召回率(如恐怖份子偵測寧可誤判也不放過)。",1,[["精準率 Precision","被預測為正例的樣本中，真正為正例的比例"],["召回率 Recall","實際為正例的樣本中，被正確預測出來的比例"]]],
+          ["K折交叉驗證","K-fold Cross Validation將資料切為K份輪流驗證；K值越大，訓練所需時間越多，模型評估的穩健度通常越高；當K等於樣本總數時，即為Leave-one-out算法。",1,[["K-fold Cross Validation","將資料切成K等份，輪流以其中一份作驗證集、其餘作訓練集的評估方法"],["Leave-one-out","K值等於樣本總數的交叉驗證特例，每次只留一筆資料驗證"]]],
+          ["常見迴歸評估指標","R-Square用於評估迴歸模型的解釋力，通常隨特徵增加而上升；均方根誤差(RMSE)因平方運算容易放大離群值的影響，較平均絕對誤差(MAE)對離群值更敏感，兩者皆為數值越低代表模型越精準。",1,[["R-Square","迴歸模型解釋資料變異的比例，越接近1代表解釋力越好"],["RMSE 均方根誤差","預測誤差平方後取平均再開根號的指標，對離群值較敏感"]]],
+          ["相關係數的意義與限制","相關係數(Correlation Coefficient)數值介於-1至1之間，用於衡量變數間的線性相關性；即使數值接近極值，也不代表兩變數具有因果關係，也可用於衡量迴歸模型的表現。",0],
+          ["Log Loss的意義與特性","Log Loss主要衡量模型預測機率與真實標記值之間的分佈差距，數值介於0至無窮大之間，數值越小代表模型預測機率越接近真實標籤，適合用來評估分類模型的機率校準程度。",0],
+          ["混淆矩陣與分類指標計算","混淆矩陣(Confusion Matrix)可用於計算真陽性率(True Positive Rate)、偽陰性率(False Negative Rate)、精準率、準確率等指標，是評估二元分類模型表現的基礎工具，各指標計算方式不同、適用情境也不同。",1,[["混淆矩陣 Confusion Matrix","以實際類別與預測類別交叉列表、呈現TP/FP/TN/FN四種結果數量的表格"],["偽陰性率 False Negative Rate","實際為正例卻被誤判為負例的比例，計算為FN/(FN+TP)"]]],
+          ["分類閾值調整與風險權衡","二元分類問題常以0.5為預測閾值(Threshold)，機率大於閾值判定為正例；若希望降低漏判風險(如瑕疵檢測寧可誤判也不放過)，可降低閾值，但會增加偽陽性(False Positive，假警報)發生的機率。",1,[["閾值 Threshold","分類模型判定為正例/負例的機率分界點，預設常為0.5"],["偽陽性 False Positive","實際為負例卻被誤判為正例的假警報情形"]]],
+        ]},
+        { name: "樹模型與集成學習", points: [
+          ["決策樹的特性","決策樹使用訊息增益(Information Gain，衡量切分後不確定性降低程度的指標)衡量切分點；若不限制樹的深度，最終每個節點的樣本可能都屬於同一類別；具有高可視化與可解釋力，但也因此非常容易過擬合，須搭配限制深度等正規化手段。",1],
+          ["決策樹的分裂衡量指標","熵(Entropy)與吉尼係數(Gini Index)都是衡量訊息增益、決定切分點的常用指標；但這兩者本身無法縮短巨量資料集上的訓練時間，真正能明顯縮短訓練時間的做法是降低樹的深度。",1,[["熵 Entropy","衡量資料集不確定性(混亂程度)的指標，值越高越混亂"],["吉尼係數 Gini Index","衡量資料集不純度的另一種指標，計算成本較熵低"]]],
+          ["隨機森林的運作原理","隨機森林(Random Forest)是一種集成學習(結合多個模型的預測結果以提升整體表現)的方法，每棵樹使用抽樣而來的不同資料與特徵訓練，因此每次訓練的森林結果可能不同，最終透過多棵樹投票的方式決定預測結果。",1],
+          ["隨機森林可調的超參數","隨機森林可調整的超參數包含樹的最大深度、樹的數量、切分準則等，但不具備學習率(Learning Rate)這類梯度優化模型才有的超參數，這些調整都會影響訓練結果。",0],
+          ["超參數與參數的區別及搜尋方法","超參數(Hyperparameter)是訓練模型前需人為設定的配置，如樹的深度限制、目標函數定義；參數(Parameter)則是模型訓練完成後習得的權重，如迴歸係數。正確的超參數搜尋應搭配Cross Validation進行，不同資料集的最佳參數配置可能不同。",1,[["超參數 Hyperparameter","訓練前由人工設定、不隨訓練過程更新的設定值"],["參數 Parameter","模型訓練過程中透過資料學習更新的權重值"]]],
+          ["Bootstrapping與Boosting的差異","自助抽樣(Bootstrapping)是取後放回的隨機抽樣方式，透過隨機性降低過擬合，是隨機森林的抽樣基礎；Boosting則是根據前一個弱模型的錯誤結果逐步優化，結合多個弱學習器提升整體表現，兩者都是集成學習的實現方式。",1,[["Bootstrapping 自助抽樣","以取後放回方式重複抽樣建立訓練子集的技術"],["Boosting","依序訓練多個弱模型、每次聚焦於前一模型錯誤之處逐步優化的集成方法"]]],
+          ["梯度提升機的核心概念","梯度提升機(Gradient Boosting Machine, GBM)每次生成的弱學習器(Weak Learner)都以最小化先前模型所帶來的損失為目標，可用於迴歸與分類問題，弱學習器之間並非彼此無關，而是有前後依賴、逐步修正的關係。",1,[["GBM 梯度提升機","依序疊加弱學習器、每次針對前一模型殘差進行擬合的集成學習方法"],["弱學習器 Weak Learner","預測能力略優於隨機猜測的簡單模型，集成學習透過結合多個弱學習器提升整體表現"]]],
+          ["不均衡樣本的處理方式","處理類別不均衡問題(如詐騙偵測、瑕疵檢測)可採用對少數類別過抽樣(Oversampling)、對多數類別低抽樣(Undersampling)、或在目標函數中提高少數類別樣本的損失權重；但維度縮減(Dimension Reduction)是針對特徵降維，無法解決類別不均衡問題。",1,[["過抽樣 Oversampling","增加少數類別樣本數量以平衡類別比例的技術"],["低抽樣 Undersampling","減少多數類別樣本數量以平衡類別比例的技術"]]],
+          ["機器學習的定義","機器學習是透過大量訓練資料，讓機器自動從資料中學習出規則，而非依靠人工撰寫程式碼告訴機器規則；這點也與著重繪圖、整理等方式探索資料價值的「資料探勘」有所不同。",0],
+        ]},
+        { name: "監督式/無監督式學習與降維聚類", points: [
+          ["主成分分析PCA","主成分分析(PCA)使用前需先對資料做正規化，可將資料降至任意維度(至少一維)；降維後仍可透過視覺化觀察分群特性、具參考價值，但降維後的特徵通常難以直接對應原始意義而較難解釋。",1],
+          ["K-means分群法的限制","K-means需自行設定分群數K，可用歐式距離衡量組內距離，起始點的選取有多種方式；但其目標函數是NP-hard最優化問題，目前的優化方式並不能保證找到全域最佳解。",1,[["K-means","將資料分成K群、反覆迭代更新群中心以最小化組內距離的分群演算法"],["NP-hard","計算複雜度理論中，目前沒有已知多項式時間演算法可求得最優解的問題類別"]]],
+          ["SVM欠擬合的改善方式","支持向量機(SVM)發生欠擬合(Underfitting)時，可透過增加懲罰參數C的值來改善；C值越大代表模型越不容忍訓練誤差、會試著將所有樣本分類正確，但也代表越容易過擬合。",1,[["SVM 支持向量機","尋找最大間隔超平面以分離不同類別資料的監督式學習演算法"],["懲罰參數 C","SVM中控制誤差容忍度與間隔寬度取捨的超參數"]]],
+          ["監督式與無監督式學習的比較","目前市場上以監督式學習應用較為廣泛，需要已完整標記的資料；無監督式學習雖不需要標記資料，但仍需要資料才能訓練、且演算法一樣有目標函數進行優化。",1,[["監督式學習 Supervised Learning","使用已標記答案的資料訓練模型的學習方式"],["無監督式學習 Unsupervised Learning","使用未標記資料、由模型自行找出資料內在結構的學習方式"]]],
+          ["演算法對非線性資料的適應力","面對高度非線性且變數極多的資料集，決策樹等非線性模型通常比線性迴歸、多項式迴歸等線性模型更能擬合資料型態、取得較好的表現。",0],
+          ["無監督式學習的常見模型","階層式分群法(Hierarchical Clustering)是常見的無監督式學習模型；支持向量機與決策樹屬於監督式學習演算法，條件隨機域(Conditional Random Field)則屬於機率化模型，三者不能與無監督式學習混淆。",1,[["階層式分群法 Hierarchical Clustering","不需預先設定群數、以樹狀結構逐步合併或分裂群集的分群方法"],["條件隨機域 CRF","對序列標記問題建模的機率圖模型"]]],
+          ["降維演算法的比較","奇異值分解(SVD)、主成分分析(PCA)、自編碼器(Autoencoder)都能對高維資料進行降維；脊迴歸(Ridge Regression)是迴歸模型的正則化方法，並不具備降維能力。",1,[["奇異值分解 SVD","將矩陣分解為多個特徵矩陣乘積、可用於降維與資料壓縮的線性代數方法"],["脊迴歸 Ridge Regression","在損失函數加入L2懲罰項以縮小係數、緩解過擬合的線性迴歸方法"]]],
+          ["正則化與特徵選取","L1正規化(Lasso)偏向使特徵係數稀疏化，能有效去除無用特徵並達到特徵選取的效果；L2正規化(Ridge)則避免模型參數過於複雜、有效減緩過擬合；兩者皆是針對模型參數(而非訓練資料本身)進行處理，且可以同時使用。",1,[["L1正則化 Lasso","在損失函數加入係數絕對值懲罰項，使部分係數趨近於零、具特徵選取效果的正則化方法"],["L2正則化 Ridge","在損失函數加入係數平方懲罰項，讓權重整體變小、避免模型過度複雜的正則化方法"]]],
+        ]},
+        { name: "類神經網路訓練基礎", points: [
+          ["梯度下降法的更新方向","梯度下降法(Gradient Descent)透過往目標函數對參數偏微分(dL/dx)切線的反方向更新參數，並不保證能找到目標函數的全域極小值，若更新步長過大，損失值甚至可能因跳動而增加、不一定隨迭代單調下降。",1],
+          ["損失函數與問題類型的對應","二元分類問題應搭配二元交叉熵(Binary Cross-Entropy)作為損失函數，而非類別交叉熵(Categorical Cross-Entropy，用於多類別分類)；迴歸問題則常搭配均方誤差(Mean Square Error, MSE)。",1,[["二元交叉熵 Binary Cross-Entropy","衡量二元分類預測機率與真實標籤差距的損失函數"],["類別交叉熵 Categorical Cross-Entropy","衡量多類別分類預測機率分布與真實標籤差距的損失函數"]]],
+          ["常見的神經網路優化器","Adam、RMSProp、Nadam都是類神經網路常用的梯度優化器；AdaBoost則是機器學習中的集成學習模型，並非神經網路優化器，兩者不可混淆。",1,[["Adam","結合動量與自適應學習率、目前最常用的神經網路優化器之一"],["AdaBoost","透過調整樣本權重、依序訓練多個弱分類器的集成學習演算法"]]],
+          ["全連接層參數量計算","兩個全連接層之間的參數量計算方式為權重參數量(前層神經元數×後層神經元數)加上偏誤參數量(後層神經元數)；例如10個神經元接15個神經元的參數量為10×15+15=165。",0],
+          ["神經網路過擬合的解決方法","類神經網路常見的解決過擬合方法包括使用Dropout(訓練時隨機捨棄部分神經元)、加入正則化(Regularizers)、增加訓練資料；但增加訓練時間並無法解決過擬合，反而容易使模型更貼合訓練雜訊。",0],
+          ["SGD避免局部最小值的方法","隨機梯度下降法(SGD)可透過在損失函數的切線方向加上動量(Momentum)，幫助跳出局部最小值(Local Minimum)；初始學習率設較小值雖收斂較慢，但有助逐步逼近全域最佳解，動量無法加在啟動函數上。",1,[["SGD 隨機梯度下降","每次僅用一小批樣本估計梯度並更新參數的梯度下降變形"],["動量 Momentum","在參數更新方向累積過去梯度、幫助跳脫局部最小值的技巧"]]],
+          ["多GPU訓練的特性與限制","使用GPU訓練通常比CPU快速，當GPU記憶體不足時可降低批量大小(Batch Size)來解決；Multi-GPU訓練雖可加快訓練速度，但因各GPU間需彼此溝通、傳遞梯度更新訊息，訓練速度並不會隨GPU數量呈現線性成長。",0],
+          ["深度學習的資料前處理要求","深度學習模型的輸入僅能是數值型態的資料，若原始資料含類別型態(Categorical)特徵，必須先透過One-Hot Encoding(將類別轉換為多維0/1向量的編碼方式)轉換為數值；特徵通常需要正規化，缺失值也須先經過填補才能進行訓練。",0],
+          ["深度學習受重視的關鍵因素","類神經網路並非全新技術，早在20世紀中即已出現；近年深度學習受到廣泛重視，主要歸功於能蒐集/取得更大量的資料、硬體運算能力增強、以及在國際圖像辨識大賽等場合取得優異成績。此外，訓練資料的品質與數量都會直接影響模型表現，資料量不足或品質不佳都會使結果變差，訓練損失沒下降時應嘗試調降學習率或調整模型，而非一味增加訓練時間。",1],
+        ]},
+        { name: "啟動函數與梯度問題", points: [
+          ["啟動函數的輸出值域","Sigmoid值域為(0,1)、ReLU為(0,∞)、LeakyReLU為(-∞,∞)、雙曲正切函數(Hyperbolic Tangent, Tanh)為(-1,1)，各啟動函數的輸出範圍不同，會影響其梯度傳遞特性與適用場景。",1,[["Sigmoid","將輸出壓縮至(0,1)區間的S型啟動函數"],["LeakyReLU","ReLU的改良版，允許負值輸入有微小斜率輸出、避免神經元死亡"]]],
+          ["梯度彌散與啟動函數選擇","Tanh、Sigmoid、Softsign都會將數值壓縮至特定小範圍，容易造成梯度彌散(Vanishing Gradient，梯度隨層數增加趨近於零、使淺層參數難以更新的現象)；ReLU因正值區間梯度恆為1，較不容易發生梯度彌散現象。",1,[["梯度彌散 Vanishing Gradient","反向傳播時梯度隨層數增加而趨近於零，導致淺層參數難以更新的現象"],["Softsign","將輸出壓縮至(-1,1)區間、梯度變化較Tanh平緩的啟動函數"]]],
+          ["RNN的梯度問題與對策","遞迴類神經網路(RNN)克服梯度彌散(Vanishing Gradient)的主要手段是加入長短期記憶單元(LSTM Cell)；克服梯度爆炸(Exploding Gradient)的主要手段則是對梯度使用數值切割(Clip Gradient)，避免訊息在傳遞過程中被無限放大。",1,[["LSTM Cell 長短期記憶單元","透過閘門機制選擇性保留或遺忘訊息、緩解RNN梯度彌散問題的網路單元"],["Clip Gradient 梯度裁剪","將梯度數值限制在固定範圍內，避免梯度爆炸的技術"]]],
+          ["批次正規化的特性","批次正規化(Batch Normalization)對各特徵/特徵圖獨立進行正規化；在推論模式(Inference Mode)下使用訓練時累積的移動平均值，與訓練模式(Training Mode)所用統計量不同；Batch Size太小時正規化結果會不穩定。",1,[["批次正規化 Batch Normalization","對每個mini-batch的輸出進行正規化、加速訓練並提升穩定性的技術"],["移動平均 Moving Average","訓練過程中持續更新累積的統計量，供推論階段使用"]]],
+          ["權重與偏差的初始值設定","建置神經網路時，權重(Weights)的起始值可正可負，不同起始點會導致最終模型收斂位置不同；若各層權重全部使用同一常數作為起始值，會導致各神經元更新完全相同(對稱性問題)，但各層偏差(Bias)則可以使用統一常數作為起始值。",1,[["權重 Weights","神經網路中連接神經元、決定輸入訊號強度的可學習參數"],["偏差 Bias(神經網路)","神經網路中獨立於輸入、可平移啟動函數輸出的可學習參數"]]],
+        ]},
+        { name: "CNN與電腦視覺應用", points: [
+          ["卷積層輸出尺寸計算","卷積層輸出尺寸公式為(輸入尺寸-過濾器尺寸)/步長+1，深度則等於過濾器數量；例如輸入7×7×3、20個3×3×3過濾器、無填充(No Padding)、步長為2，輸出尺寸為(7-3)/2+1=3，即3×3×20。",0,[["過濾器 Filter","卷積層中在輸入資料上滑動、提取局部特徵的權重矩陣"],["步長 Stride","過濾器每次滑動的距離"]]],
+          ["池化層的運作方式","池化層用於降低特徵圖尺寸並保留重要資訊，最大池化(Max Pooling)取窗口內最大值，平均池化(Average Pooling)取窗口內平均值，兩者皆為常見的下採樣手法。",0,[["最大池化 Max Pooling","取局部窗口內最大值作為輸出的池化方式"],["平均池化 Average Pooling","取局部窗口內平均值作為輸出的池化方式"]]],
+          ["自編碼器的特性","自編碼器(AutoEncoder)屬於非監督式學習，可用於資料降維，神經網路結構不必對稱，訓練後的參數可遷移(Transfer)到其他任務(如分類問題)，常作為預訓練之用。",1,[["AutoEncoder 自編碼器","透過編碼-解碼架構學習資料壓縮表示、屬於非監督式學習的神經網路"],["遷移 Transfer","將已訓練好的模型參數應用到新任務上的做法"]]],
+          ["1x1卷積層的作用","1x1卷積層可用於降低維度、增加運算效率、降低內存消耗，也可用於增加維度(Channels)實現跨維度整合，首次於Inception Network中提出，又稱mlp Convolution layer；為求運算效率通常搭配ReLU作為啟動函數。",1,[["1x1卷積層","卷積核尺寸為1×1、常用於調整通道數與整合跨通道資訊的卷積層"],["Inception Network","首次提出1×1卷積層概念、以多尺度並行卷積結構著稱的CNN架構"]]],
+          ["物件偵測常用模型架構","YOLO(You Only Look Once)、R-CNN、Faster R-CNN都是物件偵測常用的深度學習模型架構；Sequence-to-Sequence則常用於文本翻譯與序列生成的遞迴神經網路架構，並非物件偵測模型。",1,[["YOLO","將偵測視為單次回歸問題、速度快的即時物件偵測模型"],["R-CNN / Faster R-CNN","先產生候選區域再分類定位的兩階段物件偵測模型系列"],["Sequence-to-Sequence","將輸入序列轉換為輸出序列、常用於翻譯與生成任務的架構"]]],
+          ["GAN的常見應用","生成式對抗網路(GAN)常見應用包含圖片生成、解析度提升(Super Resolution)、圖像風格轉換；圍棋等棋類AI程式則屬於強化學習的應用範圍，並非GAN的應用。",1,[["GAN 生成式對抗網路","由生成器與判別器互相對抗訓練、用於生成擬真資料的網路架構"],["Super Resolution 解析度提升","將低解析度影像重建為高解析度影像的技術"]]],
+          ["殘差網路的特性","殘差網路(ResNet)是目前卷積神經網路常用的架構，影像辨識效果優於AlexNet；若要使各層輸出均化，需搭配批次正規化(Batch Normalization)層，Sigmoid與Tanh因值域有限並無法達成此效果。",1,[["殘差網路 ResNet","透過捷徑連接(Skip Connection)讓網路可堆疊更深、緩解梯度消失的CNN架構"],["AlexNet","2012年在ImageNet競賽奪冠、開啟深度學習熱潮的經典CNN架構"]]],
+          ["常見模型與應用任務的配對","CycleGAN用於圖像風格轉換(而非語意理解)；U-Net用於圖像語義分割；Attention-Based Network(Transformer)用於機器翻譯；YOLO用於物體偵測，各模型架構常對應特定任務類型，不可混淆。",1,[["CycleGAN","無需成對資料即可學習兩個影像域互轉的GAN架構，常用於風格轉換"],["U-Net","具編碼-解碼對稱結構、常用於醫學影像等語義分割任務的CNN架構"],["Transformer","以自注意力機制取代遞迴結構、廣泛用於機器翻譯與NLP的架構"]]],
+          ["Mask-RCNN的多重損失函數","Mask-RCNN處理實例分割(Instance Segmentation)時結合多個損失函數：分類使用類別交叉熵、邊框迴歸使用Smooth L1 Loss、遮罩(Mask)預測使用二元交叉熵，並未使用Hinge Loss。",1,[["Mask-RCNN","在Faster R-CNN基礎上加入遮罩預測分支、可同時偵測與分割物件的模型"],["Smooth L1 Loss","結合L1與L2優點、對離群值較不敏感的邊框迴歸損失函數"]]],
+        ]},
+        { name: "強化學習基礎", points: [
+          ["Q-Learning的基本要素","Q-Learning是一種強化學習演算法，基本要素包含行動(Action)、狀態(State)、酬賞(Reward)、未來狀態，透過學習狀態-行動的Q值來決定最佳策略；「監督(Supervise)」並非其要素。",1,[["強化學習 Reinforcement Learning","代理者透過與環境互動、依酬賞訊號學習最佳行動策略的學習範式"],["Q值 Q-value","衡量在特定狀態下採取某行動、未來可獲得累積酬賞期望值的函數"]]],
+          ["Epsilon的角色","Q-Learning中Epsilon用於控制代理者選擇行為時的隨機化程度(而非對酬賞的重視程度)，隨訓練過程降低隨機化程度通常能得到更好的結果，且Epsilon與學習率彼此無關。",0],
+          ["Q-Learning與Policy-based Learning的比較","Q-Learning學習狀態的Q值、根據經驗修正，動作型態多為離散值，採單步更新；Policy-based Learning直接學習動作機率，透過實際行為結果修正，動作型態可為離散或連續值，採回合更新。",1,[["Q-Learning","透過學習狀態-行動對的Q值、以經驗更新方式尋找最佳策略的價值導向強化學習演算法"],["Policy-based Learning","直接學習「狀態→動作機率分布」的策略函數、透過實際行為結果修正的強化學習方法"]]],
+          ["強化學習的代表性應用","強化學習常見應用包含圍棋等棋類AI程式(如AlphaGo)，透過代理者不斷與環境互動、依酬賞訊號優化決策；此類應用有別於GAN著重的生成任務(圖片生成、風格轉換、解析度提升)。",0],
+        ]},
+      ]
+    },
+    {
+      name: "AI統計與資料分析原理", short: "統計分析", count: 36, key: "c5",
+      subtopics: [
+        { name: "資料屬性與前處理", points: [
+          ["資料屬性四大尺度類型","資料屬性依測量尺度分為名目、次序、等距、等比四種，其中名目與次序屬於定性（類別）屬性，等距、等比（另有時再分出絕對尺度）屬於定量（數值）屬性。",1,[["名目 Nominal","僅能分類無順序，如性別、血型"],["次序 Ordinal","有順序但間距不固定，如名次、滿意度等級"],["等距 Interval","有相等間距但無絕對零點，如攝氏溫度"],["等比 Ratio","有絕對零點可計算比例，如身高、體重"],["絕對 Absolute","以計數方式呈現且具絕對零點的尺度"]]],
+          ["等頻分割 vs 等距分割","資料離散化（分箱）常用兩種方法：等頻分割法（Equal Depth/Frequency）依資料筆數平均分組，等距分割法（Equal Width/Distance）依數值全距平均切成等寬區間，同一筆資料用兩法分組的結果可能不同。",1,[["等頻分割法","依樣本筆數平均分組，每組筆數大致相同"],["等距分割法","依數值全距平均切割，每組區間寬度相同"]]],
+          ["集中趨勢：眾數與中位數","眾數（Mode）為出現次數最多的類別或數值，中位數（Median）為資料排序後最中間的值，觀察值為偶數個時取中間兩數的平均。",0,[["眾數 Mode","次數最多的類別或數值"],["中位數 Median","排序後最中間的數值"]]],
+          ["標準差衡量離散程度","標準差（Standard Deviation）是變異數的平方根，用以衡量資料相對於平均數的離散（分散）程度，須先求出平均數再計算各值離差平方和。",0],
+          ["最大最小正規化","最大最小正規化（Min-Max Normalization）以公式（x-最小值）/（最大值-最小值）將屬性值線性映射到0至1範圍，消除不同量綱對後續分析的影響。",0],
+          ["時空資料視覺化技術辨識","等高線圖、曲面圖、折線圖皆可用於呈現資料隨時間或空間的變化趨勢，圓餅圖則是呈現各類別佔整體的百分比關係，並非專用於時空資料視覺化。",0],
+          ["資料預處理：轉換與降維","資料挖掘流程中，蒐集原始資料後進行轉換與降維（Dimensionality Reduction），目的在整理資料格式並降低資料複雜度，屬於資料預處理（Data Preprocessing）步驟。",0],
+        ]},
+        { name: "抽樣方法與抽樣分配", points: [
+          ["五種抽樣方法比較","常見機率抽樣方法包括簡單隨機抽樣（可分放回與不放回）、分層抽樣、集體抽樣、系統抽樣與漸進抽樣，其中集體抽樣先抽出集體再對集體內個體全數普查，漸進抽樣則用於樣本數難以事先決定的情況。",1,[["簡單隨機抽樣","母體中每個個體被抽中機率相等，可分放回與不放回兩種"],["分層抽樣","先將母體依特性分層，再由各層抽樣"],["集體抽樣","先抽出集體單位，再對集體內個體全數調查"],["系統抽樣","依固定間距規則從母體中抽樣"],["漸進抽樣","適合樣本數難以事先確定時，逐步擴大樣本規模"]]],
+          ["中央極限定理","中央極限定理指出，當樣本數夠大時，不論母體原始分配為何，多次抽樣所得的樣本平均數抽樣分配會趨近常態分配，而非偏態分配。",1,[["常態分配 Normal Distribution","鐘型左右對稱的機率分配"],["偏態分配 Skewed Distribution","分配不對稱，正偏態尾巴偏右、負偏態尾巴偏左"]]],
+          ["抽樣分配的定義","抽樣分配（Sampling Distribution）是指樣本統計量（如樣本平均數）在重複抽樣過程中所形成的機率分配。",0],
+          ["統計量與母體參數之別","統計量（Statistic）是由樣本資料計算而得的數值，用來推論母體參數（Parameter）；母體參數是描述母體本身特性的未知數值，兩者常在考題中被混淆。",1,[["統計量 Statistic","由樣本計算出的數值"],["母體參數 Parameter","描述母體特性的未知數值"]]],
+          ["樣本數與檢定力的關係","樣本數增加時統計考驗力（Power of Test）會提升、第二類型錯誤（Beta）機率會下降；在給定信心水準與母體標準差下，欲縮小估計誤差範圍所需的樣本數也可由公式反推估算。",0],
+        ]},
+        { name: "假設檢定與統計推論", points: [
+          ["兩類假設檢定錯誤","虛無假設為真卻誤判予以拒絕稱為第一類型錯誤（Type I Error，機率為α）；虛無假設為假卻未被拒絕稱為第二類型錯誤（Type II Error，機率為β）。",1,[["第一類型錯誤","虛無假設為真卻誤予拒絕，機率為α"],["第二類型錯誤","虛無假設為假卻未拒絕，機率為β"]]],
+          ["統計考驗力","統計考驗力（Power of Test）等於1減去第二類型錯誤機率（1-β），代表正確拒絕錯誤虛無假設的機率，樣本數越大考驗力通常越高。",1],
+          ["P值的定義與影響因素","P值（P-Value）是指在虛無假設成立下，觀察到目前樣本結果或更極端結果發生的機率；P值會受虛無假設與對立假設設定的影響，但不受信心水準（1-α）高低的影響。",1,[["虛無假設 H0","檢定中預設成立、寫成等式的假設"],["對立假設 H1","研究者欲驗證支持、與虛無假設相對的假設"],["顯著水準 α","判斷是否拒絕虛無假設的機率門檻"]]],
+          ["t檢定/F檢定/卡方檢定辨識","t檢定用於少量樣本平均數比較，F檢定（變異數分析）用於檢定多組母體平均數是否相等且假設各母體變異數相同，卡方檢定（Chi-square Test）用於驗證觀察次數分配是否異於理論分配。",1,[["F檢定","檢定多組母體平均數是否相等，假設各母體變異數相同"],["卡方檢定","驗證一組觀察次數分配是否異於理論分配"]]],
+          ["迴歸方程式係數意義","線性迴歸方程式y=a+bx中，a為截距，b為斜率，代表自變數x每增加一單位時，應變數y的平均增加量。",0],
+          ["常態分配下的標準差區間比例","常態分配下，平均數正負一個標準差範圍內約涵蓋68%的資料量，可據此估算超出某標準差範圍外的資料筆數或人數比例。",0],
+        ]},
+        { name: "資料挖掘任務類型", points: [
+          ["建立模型（預測建模）","根據已知變數值建構模型以預測其他變數，或分析資料分佈狀況將多維空間劃分成等價區域，兩者皆屬於資料挖掘中的建立模型（Model Building）工作。",0],
+          ["分類 vs 分群","分類（Classification）依事先定義好的類別標籤將資料分群，屬於監督式學習且有標準答案；分群（Clustering）在不知資料具何種特徵時，依相似度將資料自動分組，屬於非監督式學習且無標準答案。",1,[["分類 Classification","依事先定義的標籤分群，監督式學習"],["分群 Clustering","依相似度自動分群，非監督式學習"]]],
+          ["關聯規則分析","關聯規則分析（Association Rule Analysis）用於發掘項目間的共同出現關係，例如顧客購買某項商品時同時購買另一項商品的關聯性，常見於購物籃分析。",0],
+          ["探索性資料分析","探索性資料分析（Exploratory Data Analysis, EDA）使用互動式與視覺化技術探索資料特性，屬於不預設假設的初步資料挖掘任務。",0],
+          ["Precision 與 Recall","評估分類演算法效能時，Precision（準確率）指預測為陽性的樣本中真正為陽性的比例；Recall（召回率）指所有真正陽性樣本中被正確預測出的比例，兩者常搭配混淆矩陣一起評估。",1,[["Precision 準確率","預測為陽性的樣本中，真正為陽性的比例"],["Recall 召回率","所有真正陽性樣本中，被正確預測出的比例"],["ROC","Receiver Operating Characteristic，另一種分類模型效能評估工具，本類題目常見的干擾選項"]]],
+        ]},
+        { name: "機率模型與不確定推理", points: [
+          ["全機率法則計算","已知各來源所占比例與各自發生某事件（如瑕疵品）的條件機率時，可用全機率公式（各來源比例乘以其條件機率後加總）計算整體事件發生的機率，是貝氏定理的基礎運算。",0],
+          ["貝氏網路基本概念","貝氏網路（Bayesian Network）又稱信念網路（Belief Network），是一種以有向無環圖（Directed Acyclic Graphical Model）呈現變數間條件相依關係的機率圖形模型；節點代表隨機變數（可觀察、潛在變量或未知參數），連結節點的箭頭表示變數間的條件相依關係。",1,[["貝氏網路 Bayesian Network","以機率圖形呈現變數條件相依關係的模型，又稱信念網路"],["有向無環圖 DAG","Directed Acyclic Graphical Model，貝氏網路的圖形結構基礎"]]],
+          ["貝氏網路的條件機率表","當貝氏網路節點性質為離散型時，可依P(Xi|Pi)寫出條件機率表（Conditional Probability Table），每一列代表所有可能發生的父節點狀態組合且機率總和須為1；模型複雜時以列舉法求解機率會相當繁複。",0],
+          ["模糊邏輯與模糊集合","模糊邏輯（Fuzzy Logic）中的模糊集合（Fuzzy Set）是明確集合的擴充、並非二元（Binary）集合，其歸屬函數（Membership Function）值介於0~1之間，用以表示元素隸屬該集合的程度。",1,[["模糊集合 Fuzzy Set","元素隸屬程度介於0~1之間的集合，非二元集合"],["歸屬函數 Membership Function","定義元素歸屬模糊集合程度高低的函數"]]],
+          ["模糊交集（T-Norms）的條件","模糊交集又稱T-Norms，是具有兩個參數的函式，須符合邊界條件（兩參數皆為0時結果為0）、單調性（參數越大結果越大）、交換性（參數順序不影響結果），但不需符合加成性（結果並非隨參數倍數成長）。",1],
+        ]},
+      ]
+    },
+    {
+      name: "AI系統開發資源", short: "開發資源", count: 27, key: "c6",
+      subtopics: [
+        { name: "Python語言基礎與語法規則", points: [
+          ["變數命名的合法規則","Python變數名稱不可以數字開頭（如64ML不合法），但可用底線或字母開頭，self、_name_皆為合法識別字。",0],
+          ["動態型別與del釋放資源","Python為動態型別語言，變數不須宣告資料型態、也不須事先宣告即可使用，但必須先建立並給值才能使用；可用del關鍵字釋放不再需要的變數所佔記憶體資源。",1,[["動態型別 Dynamic Typing","變數型態由賦值內容自動決定，不須事先宣告資料型態"],["del","釋放/刪除已建立變數所佔記憶體資源的關鍵字"]]],
+          ["賦值與括號賦值語法","a-=b是a=a-b的複合賦值運算子簡化寫法；a,b=b,a為不需暫存變數即可交換兩變數值的寫法；a=b=c=d=1可將同一值連鎖賦值給多個變數；但Python不支援在括號內執行指定敘述，如a=(b=c+2)或(6*=6)皆會產生SyntaxError。",1,[["複合賦值運算子 -=","如a-=b等同於a=a-b的簡化寫法"],["連鎖賦值 a=b=c=d=1","將同一個值同時指定給多個變數"],["交換寫法 a,b=b,a","不需暫存變數即可互換兩變數的值"],["括號內指定敘述（不合法）","Python直譯器不支援在括號中執行賦值，會產生SyntaxError"]]],
+          ["數值與容器內建型態","Python預設支援int、float、complex等數值型態，以及list、string、map等容器與字串型態，但沒有bag這種型態；字串方面也沒有內建char型態，字元其實是長度為1的字串。",1,[["complex","複數型態，是Python內建但常被誤認不存在的數值型態"],["char","Python沒有內建的字元型態，字元以長度為1的字串表示"]]],
+          ["字串串接與索引運算","字串可用單引號或雙引號建立、用+號串接，也可用從0開始的索引取出單一字元（如'Hello'[1]為'e'）再串接組成新字串，但預設無法用-號刪除字串內的子字串（需自行實作）。",0],
+          ["鏈式比較與短路求值","Python支援如6>0>0的鏈式比較寫法，等同於6>0 and 0>0；and/or/not依短路求值規則運算，例如not(6!=6 and 5!=5)會先算出內層布林值再取反。",0],
+          ["沒有三元運算子語法","Python不支援其他語言常見的x?a:b三元運算子語法，須改用a if 條件 else b的行內if-else寫法達到相同效果。",1],
+        ]},
+        { name: "R語言基礎資料結構", points: [
+          ["R語言四大資料結構","R語言原生支援向量（Vector）、串列（List）、矩陣（Matrix）等資料結構，但不支援其他語言常見的字典（Dictionary）型態。",1,[["向量 Vector","以c()建立的同質資料序列，例如c(1,2,3,4)"],["串列 List","以list()建立、可容納不同型態元素的資料結構，需用[[ ]]取出實際元素"],["矩陣 Matrix","二維且元素同質的陣列結構"]]],
+          ["R語言函式呼叫方式","R語言函式可透過參數的位置、參數的名稱、或使用預設參數值三種方式呼叫，但不支援用「參數別名」的方式呼叫函式。",0],
+          ["R語言常見應用領域","R語言常應用於迴歸分析、資料挖掘、機率推論等統計分析領域，較不適合用於嵌入式系統開發。",0],
+          ["向量與串列索引差異","對串列（List）用雙中括號x[[i]]取出的是該索引位置實際儲存的元素內容（可能是多個值），可與另一向量逐元素相乘；對向量（Vector）用單中括號x[i]取出的只是單一數值，會以純量方式與另一向量做廣播（broadcast）相乘。",1,[["[[ ]] 雙中括號","從串列(List)中取出實際元素內容的索引語法"],["[ ] 單中括號","從向量取出指定位置的單一數值、或從串列取出子串列的索引語法"]]],
+        ]},
+        { name: "R語言統計建模與套件管理", points: [
+          ["glm建立線性迴歸模型","R語言使用glm()函式建立廣義線性迴歸模型，可用來處理測量二元反應變數（Binary Response Variable）發生機率的迴歸分析。",1],
+          ["R矩陣運算函式比較","R語言提供多個矩陣運算函式：t(m)計算轉置矩陣、solve(m)計算反矩陣（矩陣求逆）、det(m)計算矩陣的行列式值、diag(m)取出矩陣對角線元素或建立對角矩陣，四者功能容易混淆。",1,[["t()","計算轉置矩陣，將矩陣的列與行互換"],["solve()","計算反矩陣（矩陣求逆）"],["det()","計算矩陣的行列式值"],["diag()","取出矩陣對角線元素或建立對角矩陣"]]],
+          ["R套件安裝與查詢函式","使用install.packages(\"套件名稱\")可安裝新的R套件（例如svm），使用installed.packages()則可查詢目前環境中已安裝的所有套件列表。",0,[["install.packages()","安裝指定套件到R環境中的函式，套件名稱需以字串傳入"],["installed.packages()","列出目前R環境中已安裝所有套件的函式"]]],
+        ]},
+        { name: "TensorFlow張量建立與形狀操作", points: [
+          ["tf.fill建立填滿矩陣","tf.fill(dims, value)可依dims參數設定的維度，建立一個各維度大小符合dims、每個元素皆為value的多維矩陣，例如tf.fill([3,2],5)會建立3列2欄、每個元素皆為5的矩陣。",0],
+          ["tf.reshape改變張量形狀","tf.reshape(tensor, shape)可將原始張量依原始資料順序，重新映射為指定shape形狀的新張量，例如將長度10的一維陣列reshape為[2,5]會依序填入2列5欄的矩陣。",0],
+          ["Session建立與執行運算","TensorFlow需透過會話（Session）來執行定義好的運算圖，可寫成sess = tf.Session()或搭配with tf.Session() as sess:寫法，但並沒有tf.Run()這個函式。",1],
+          ["tf.matmul矩陣乘積運算","matmul是matrix multiplication（矩陣乘積）的縮寫，tf.matmul()可將兩個張量做矩陣相乘，需注意維度須符合矩陣乘法規則（前者的欄數要等於後者的列數）。",0],
+          ["tf.concat沿軸連接張量","tf.concat()可將兩個張量連接起來，第二個參數（軸，axis）為0時表示沿row（列）方向連接，為1時則表示沿column（欄）方向連接。",1,[["axis=0（row串接）","沿列(row)方向連接兩個張量，形成垂直堆疊的結果"],["axis=1（column串接）","沿欄(column)方向連接兩個張量，形成水平並排的結果"]]],
+        ]},
+        { name: "TensorFlow神經網路訓練機制", points: [
+          ["feed_dict資料傳遞機制","TensorFlow執行運算時，使用feed_dict這個字典（Dictionary）型態的參數，於執行階段動態餵入訓練資料給預先定義好大小與型態的張量；Set（集合）、Tuple（元組）雖然也是Python容器型態，但都不是feed_dict所使用的型態。",1,[["Dictionary 字典","以key-value配對儲存資料的容器型態，是feed_dict所要求的資料型態"],["Set／Tuple","Python另外兩種容器型態：Set元素不重複且無序、Tuple建立後不可變，皆非feed_dict所使用的型態"]]],
+          ["權重初始化方式比較","tf.Variable()用來保存並更新神經網路的參數，一般神經網路的權重初始值應設為0~1的隨機值，正確作法是使用tf.random.uniform()產生均勻分布亂數，而非tf.ones()全部設1、tf.zeros()全部設0、或tf.random_normal()常態分布亂數。",1,[["tf.ones()","將所有元素初始化為1，不適合當作權重初始值"],["tf.zeros()","將所有元素初始化為0，不適合當作權重初始值"],["tf.random_normal()","以常態分布產生隨機初始值"],["tf.random.uniform()","以0~1均勻分布產生隨機初始值，是題目正確答案採用的權重初始化方式"]]],
+          ["reduce_mean計算平均值","tf.reduce_mean()可計算張量的平均值，常用來計算原始資料與預測資料間的損失度（loss）；不指定軸時計算全體平均，指定第二參數（軸）如0時則計算沿該軸方向（例如各欄）的平均值。",0],
+          ["argmax找出最大值位置","tf.argmax()可找出張量在指定軸上最大值所在的位置（索引），第二個參數為0時表示沿row（列）方向找出最大值的位置。",0],
+        ]},
+      ]
+    },
+  ];
+
+  // =================================================================
+  // 3) 以下是共用渲染邏輯，正常不需要修改
+  // =================================================================
+
+  document.getElementById("brand-name").textContent = CONFIG.pageTitle;
+  document.getElementById("hero-eyebrow").textContent = CONFIG.courseName + "・備課參考";
+
+  var totalQuestions = 0, totalSub = 0, totalLeaf = 0, totalHot = 0;
+  DATA.forEach(function (cat) {
+    totalQuestions += cat.count;
+    cat.subtopics.forEach(function (sub) {
+      totalSub++;
+      sub.points.forEach(function (p) { totalLeaf++; if (p[2]) totalHot++; });
+    });
+  });
+
+  document.getElementById("stat-line").textContent = DATA.length + "大類・" + totalSub + "子主題・共" + totalQuestions + "題";
+  document.getElementById("hero-title").textContent =
+    CONFIG.heroTitle || ("把 " + totalQuestions + " 題題庫，整理成可以直接拿去排課的大綱");
+  document.getElementById("hero-desc").textContent =
+    CONFIG.heroDesc || ("依 " + DATA.length + " 大類、" + totalSub + " 個子主題整理知識點，附建議授課比重，帶 ★ 的是題庫中特別容易混淆或高頻出現的重點，排課時可以多留一點時間。");
+  document.getElementById("page-footer").innerHTML =
+    "資料來源：" + escapeHtml(CONFIG.sourceNote) + "（" + escapeHtml(CONFIG.courseCode) + "）題目解析內容整理，共 " + totalQuestions + " 題。知識點文字為AI依題庫內容摘要整理，正式授課前建議對照原始題目複核。";
+
+  // ---------- jump nav (tabs) ----------
+  var jumpnav = document.getElementById("jumpnav");
+
+  var overviewChip = document.createElement("button");
+  overviewChip.type = "button";
+  overviewChip.className = "jumpchip";
+  overviewChip.setAttribute("data-tab", "overview");
+  overviewChip.textContent = "總覽";
+  jumpnav.appendChild(overviewChip);
+
+  DATA.forEach(function (cat, i) {
+    var a = document.createElement("button");
+    a.type = "button";
+    a.className = "jumpchip";
+    a.setAttribute("data-tab", String(i));
+    a.innerHTML = '<span class="dot" style="background:var(--' + cat.key + ')"></span>' + (i + 1) + ". " + escapeHtml(cat.short || cat.name);
+    jumpnav.appendChild(a);
+  });
+
+  // ---------- plan table ----------
+  var planTable = document.getElementById("plan-table");
+  var header = document.createElement("div");
+  header.className = "plan-row";
+  header.innerHTML = "<span></span><span>單元</span><span class='num'>題數</span><span class='num'>比重</span><span class='num'>子主題</span><span class='num'>重點★</span><span class='num'>建議時數</span>";
+  planTable.appendChild(header);
+
+  var hoursCells = [];
+
+  DATA.forEach(function (cat, i) {
+    var hotCount = 0, subCount = cat.subtopics.length;
+    cat.subtopics.forEach(function (s) { s.points.forEach(function (p) { if (p[2]) hotCount++; }); });
+    var fraction = totalQuestions ? cat.count / totalQuestions : 0;
+    var pct = Math.round(fraction * 100);
+
+    var row = document.createElement("a");
+    row.className = "plan-row";
+    row.href = "#unit-" + i;
+    row.setAttribute("data-tab", String(i));
+    row.innerHTML =
+      '<span class="dot" style="background:var(--' + cat.key + ')"></span>' +
+      '<span class="name">' + (i + 1) + ". " + escapeHtml(cat.name) + "</span>" +
+      '<span class="num">' + cat.count + "題</span>" +
+      '<span class="num">約 ' + pct + "%</span>" +
+      '<span class="num">' + subCount + "</span>" +
+      '<span class="num">' + hotCount + "</span>" +
+      '<span class="num hours-cell">—</span>';
+    planTable.appendChild(row);
+    hoursCells.push({ el: row.querySelector(".hours-cell"), fraction: fraction });
+
+    var bar = document.createElement("div");
+    bar.className = "weightbar";
+    bar.innerHTML = '<span style="width:' + pct + '%; background:var(--' + cat.key + ')"></span>';
+    planTable.appendChild(bar);
+  });
+
+  var hoursInput = document.getElementById("hours-input");
+  hoursInput.addEventListener("input", function () {
+    var total = parseFloat(hoursInput.value);
+    var valid = !isNaN(total) && total > 0;
+    if (!valid) {
+      hoursCells.forEach(function (c) { c.el.textContent = "—"; });
+      return;
+    }
+    // Largest-remainder apportionment in 0.5h slots, so the column always
+    // sums exactly to the entered total — rounding each row independently
+    // (old approach) can drift the total away from what the teacher typed.
+    var totalSlots = Math.max(0, Math.round(total * 2));
+    var raw = hoursCells.map(function (c) { return c.fraction * totalSlots; });
+    var base = raw.map(Math.floor);
+    var used = base.reduce(function (a, b) { return a + b; }, 0);
+    var remainder = totalSlots - used;
+    var order = raw
+      .map(function (v, i) { return { i: i, frac: v - base[i] }; })
+      .sort(function (a, b) { return b.frac - a.frac; });
+    for (var k = 0; k < remainder && k < order.length; k++) { base[order[k].i]++; }
+    hoursCells.forEach(function (c, i) { c.el.textContent = (base[i] * 0.5).toFixed(1) + "h"; });
+  });
+
+  // ---------- units ----------
+  var unitsEl = document.getElementById("units");
+  DATA.forEach(function (cat, ci) {
+    var section = document.createElement("section");
+    section.className = "unit";
+    section.id = "unit-" + ci;
+    section.style.setProperty("--u-color", "var(--" + cat.key + ")");
+    section.style.setProperty("--u-tint", "var(--" + cat.key + "-tint)");
+
+    var head = document.createElement("div");
+    head.className = "unit-head";
+    var subCount = cat.subtopics.length;
+    head.innerHTML =
+      '<span class="idx">' + (ci + 1) + "</span>" +
+      "<h2>" + escapeHtml(cat.name) + "</h2>" +
+      '<span class="unit-meta">' + cat.count + "題・" + subCount + "個子主題</span>" +
+      '<button class="unit-copy" data-ci="' + ci + '">複製本單元大綱</button>';
+    section.appendChild(head);
+
+    var grid = document.createElement("div");
+    grid.className = "subgrid";
+    cat.subtopics.forEach(function (sub) {
+      var card = document.createElement("div");
+      card.className = "subcard";
+      var h3 = document.createElement("h3");
+      h3.textContent = sub.name;
+      card.appendChild(h3);
+      var ul = document.createElement("ul");
+      sub.points.forEach(function (p) {
+        var terms = p[3];
+        var li = document.createElement("li");
+        li.className = "pt" + (p[2] ? " hot" : "") + (terms ? " expandable" : "");
+        var termsText = terms ? terms.map(function (t) { return t[0] + " " + t[1]; }).join(" ") : "";
+        li.setAttribute("data-text", (p[0] + " " + p[1] + " " + termsText).toLowerCase());
+        li.innerHTML =
+          '<div class="pt-row">' +
+          (p[2] ? '<span class="star">★</span>' : "") +
+          "<b>" + escapeHtml(p[0]) + "</b>　" + escapeHtml(p[1]) +
+          (terms ? '<span class="expand-mark" aria-hidden="true">展開<span class="chev">▾</span></span>' : "") +
+          "</div>";
+        if (terms) {
+          var sub2 = document.createElement("ul");
+          sub2.className = "sub-terms";
+          terms.forEach(function (t) {
+            var li2 = document.createElement("li");
+            li2.innerHTML = "<b>" + escapeHtml(t[0]) + "</b>　" + escapeHtml(t[1]);
+            sub2.appendChild(li2);
+          });
+          li.appendChild(sub2);
+          li.setAttribute("tabindex", "0");
+          li.setAttribute("role", "button");
+          li.setAttribute("aria-expanded", "false");
+          li.addEventListener("click", function () { toggleExpand(li); });
+          li.addEventListener("keydown", function (e) {
+            if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggleExpand(li); }
+          });
+        }
+        ul.appendChild(li);
+      });
+      card.appendChild(ul);
+      grid.appendChild(card);
+    });
+    section.appendChild(grid);
+    unitsEl.appendChild(section);
+  });
+
+  // ---------- tabs ----------
+  var currentTab = "overview";
+
+  function setActiveTab(tabId, opts) {
+    opts = opts || {};
+    currentTab = tabId;
+    var isOverview = tabId === "overview";
+
+    document.body.classList.toggle("tab-single", !isOverview);
+
+    DATA.forEach(function (cat, i) {
+      var el = document.getElementById("unit-" + i);
+      var show = isOverview || String(i) === String(tabId);
+      el.style.display = show ? "" : "none";
+      el.classList.toggle("single", !isOverview && show);
+    });
+
+    Array.prototype.forEach.call(jumpnav.querySelectorAll(".jumpchip"), function (chip) {
+      chip.classList.toggle("active", chip.getAttribute("data-tab") === String(tabId));
+    });
+
+    if (!opts.skipHash) {
+      history.replaceState(null, "", "#" + (isOverview ? "overview" : "unit-" + tabId));
+    }
+    applySearchFilter();
+    if (!opts.skipScroll) window.scrollTo({ top: 0, behavior: "auto" });
+  }
+
+  document.addEventListener("click", function (e) {
+    var tabEl = e.target.closest("[data-tab]");
+    if (tabEl) {
+      e.preventDefault();
+      setActiveTab(tabEl.getAttribute("data-tab"));
+    }
+  });
+
+  document.getElementById("btn-back").addEventListener("click", function () {
+    setActiveTab("overview");
+  });
+
+  function initTabFromHash() {
+    var h = location.hash.replace("#", "");
+    var m = h.match(/^unit-(\d+)$/);
+    if (m && DATA[parseInt(m[1], 10)]) {
+      setActiveTab(m[1], { skipHash: true, skipScroll: true });
+    } else {
+      setActiveTab("overview", { skipHash: true, skipScroll: true });
+    }
+  }
+
+  function toggleExpand(li) {
+    var isOpen = li.classList.toggle("expanded");
+    li.setAttribute("aria-expanded", isOpen ? "true" : "false");
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+
+  // ---------- copy outline ----------
+  function outlineText(ci) {
+    var cat = DATA[ci];
+    var lines = [cat.name + "（" + cat.count + "題）", ""];
+    cat.subtopics.forEach(function (sub) {
+      lines.push("■ " + sub.name);
+      sub.points.forEach(function (p) {
+        lines.push("　" + (p[2] ? "★ " : "・") + p[0] + "：" + p[1]);
+        if (p[3]) {
+          p[3].forEach(function (t) { lines.push("　　- " + t[0] + "：" + t[1]); });
+        }
+      });
+      lines.push("");
+    });
+    return lines.join("\n");
+  }
+  function copyText(text, btn) {
+    var done = function () {
+      var old = btn.textContent;
+      btn.textContent = "已複製 ✓";
+      setTimeout(function () { btn.textContent = old; }, 1600);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done).catch(function () { fallbackCopy(text); done(); });
+    } else {
+      fallbackCopy(text); done();
+    }
+  }
+  function fallbackCopy(text) {
+    var ta = document.createElement("textarea");
+    ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand("copy"); } catch (e) {}
+    document.body.removeChild(ta);
+  }
+
+  document.addEventListener("click", function (e) {
+    var btn = e.target.closest(".unit-copy");
+    if (btn) copyText(outlineText(parseInt(btn.getAttribute("data-ci"), 10)), btn);
+  });
+
+  document.getElementById("btn-copyall").addEventListener("click", function (e) {
+    var all = DATA.map(function (_, i) { return outlineText(i); }).join("\n");
+    copyText(CONFIG.courseName + "　備課大綱\n\n" + all, e.currentTarget);
+  });
+
+  // ---------- expand/collapse all term breakdowns ----------
+  var termsExpanded = false;
+  document.getElementById("btn-expand-terms").addEventListener("click", function (e) {
+    termsExpanded = !termsExpanded;
+    e.currentTarget.textContent = termsExpanded ? "▴ 收合全部名詞說明" : "▾ 展開全部名詞說明";
+    Array.prototype.forEach.call(document.querySelectorAll(".subcard li.expandable"), function (li) {
+      li.classList.toggle("expanded", termsExpanded);
+      li.classList.remove("auto-expanded");
+      li.setAttribute("aria-expanded", termsExpanded ? "true" : "false");
+    });
+  });
+
+  // ---------- hot filter ----------
+  var hotOn = false;
+  document.getElementById("btn-hot").addEventListener("click", function (e) {
+    hotOn = !hotOn;
+    e.currentTarget.classList.toggle("active", hotOn);
+    Array.prototype.forEach.call(document.querySelectorAll(".subcard li.pt"), function (li) {
+      li.classList.toggle("pt-dim", hotOn && !li.classList.contains("hot"));
+    });
+  });
+
+  // ---------- search ----------
+  var searchInput = document.getElementById("search");
+
+  function applySearchFilter() {
+    var q = searchInput.value.trim().toLowerCase();
+    var anyMatch = false;
+    var isOverview = currentTab === "overview";
+
+    DATA.forEach(function (cat, i) {
+      var unit = document.getElementById("unit-" + i);
+      var tabEligible = isOverview || String(i) === String(currentTab);
+      if (!tabEligible) return;
+
+      var unitHasMatch = false;
+      Array.prototype.forEach.call(unit.querySelectorAll(".subcard"), function (card) {
+        var cardHasMatch = false;
+        // .pt only — a plain "li" selector would also match the nested
+        // <li> inside .sub-terms, which have no data-text and crash .indexOf.
+        Array.prototype.forEach.call(card.querySelectorAll("li.pt"), function (li) {
+          var isMatch = q && li.getAttribute("data-text").indexOf(q) !== -1;
+          li.classList.toggle("pt-match", !!isMatch);
+          li.classList.toggle("pt-dim", !!q && !isMatch);
+          if (isMatch) {
+            cardHasMatch = true;
+            anyMatch = true;
+            if (li.classList.contains("expandable") && !li.classList.contains("expanded")) {
+              li.classList.add("expanded", "auto-expanded");
+              li.setAttribute("aria-expanded", "true");
+            }
+          } else if (li.classList.contains("auto-expanded")) {
+            li.classList.remove("expanded", "auto-expanded");
+            li.setAttribute("aria-expanded", "false");
+          }
+        });
+        card.style.display = (!q || cardHasMatch) ? "" : "none";
+        if (cardHasMatch) unitHasMatch = true;
+      });
+
+      if (isOverview) unit.style.display = (!q || unitHasMatch) ? "" : "none";
+    });
+
+    document.getElementById("no-results").style.display = (q && !anyMatch) ? "block" : "none";
+    document.getElementById("no-results-q").textContent = q;
+  }
+
+  searchInput.addEventListener("input", applySearchFilter);
+
+  initTabFromHash();
+})();
+</script>
